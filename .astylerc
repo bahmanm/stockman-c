@@ -1,0 +1,4 @@
+--style=linux
+--indent=tab
+--break-return-type
+--break-return-type-decl
