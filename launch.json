@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "name": "Debug Stockman-C",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/stockman-c",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb"
+    }
+  ]
+}
