@@ -27,3 +27,5 @@ target_link_libraries (
   ${PROJECT_NAME}
   ${GLIB_LIBRARIES}
   ${GIO_LIBRARIES})
+
+add_subdirectory(tests)
