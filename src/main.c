@@ -70,28 +70,28 @@ Database* db;
 gboolean
 database_invoice_save(Invoice *inv)
 {
-	if (g_hash_table_lookup(db->invoices, inv->doc_no))
+	if (g_hash_table_lookup(database_get()->invoices, inv->doc_no))
 		return FALSE;
-	g_hash_table_insert(db->invoices, inv->doc_no, inv);
+	g_hash_table_insert(database_get()->invoices, inv->doc_no, inv);
 	return TRUE;
 }
 
 Invoice*
 database_invoice_get(gchar *doc_no)
 {
-	return g_hash_table_lookup(db->invoices, doc_no);
+	return g_hash_table_lookup(database_get()->invoices, doc_no);
 }
 
 gboolean
 database_invoice_update(Invoice *inv)
 {
-	return g_hash_table_insert(db->invoices, inv->doc_no, inv);
+	return g_hash_table_insert(database_get()->invoices, inv->doc_no, inv);
 }
 
 gboolean
 database_invoice_delete(gchar *doc_no)
 {
-	return g_hash_table_remove(db->invoices, doc_no);
+	return g_hash_table_remove(database_get()->invoices, doc_no);
 }
 
 
