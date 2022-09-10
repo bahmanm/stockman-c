@@ -9,13 +9,13 @@ static Database* db;
 
 /**
  * Initialise the database.
- * Attempt to use an uninitialised database causes the program to abort.
  */
 void
 database_init();
 
 /**
  * Returns the initialised database instance.
+ * Attempt to `get` an uninitialised database causes the program to abort.
  */
 const Database*
 database_get();
@@ -48,3 +48,12 @@ database_invoice_save(Invoice *inv);
  */
 void
 database_invoices_foreach(void (*thunk)(Invoice*));
+
+/**
+ * Remove all invoices from the database.
+ *
+ * @param invoice_destroy_thunk `NULL` or Function to run for each invoice;
+ *        mainly to free up the memory.
+ */
+void
+database_invoices_clear(void (*invoice_destroy_thunk)(Invoice *));

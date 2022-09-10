@@ -52,3 +52,15 @@ database_invoices_foreach(void (*thunk)(Invoice *))
 {
 	g_hash_table_foreach(db->invoices, invoices_foreach, thunk);
 }
+
+void
+database_invoices_clear(void (*invoice_destroy_thunk)(Invoice *))
+{
+	g_autoptr(GList) keys = g_hash_table_get_keys(db->invoices);
+	for (GList *key = keys; key; key = key->next) {
+		Invoice *inv = g_hash_table_lookup(db->invoices, key);
+		if (invoice_destroy_thunk)
+			invoice_destroy_thunk(inv);
+		g_hash_table_remove(db->invoices, key->data);
+	}
+}
