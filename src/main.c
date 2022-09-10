@@ -11,7 +11,7 @@ Invoice*
 invoice_from_csv(gchar **fields);
 
 void
-invoice_pretty_print(gpointer doc_no, gpointer inv, gpointer user_data);
+invoice_pretty_print(Invoice *inv);
 
 InvoiceLine*
 invoice_line_from_csv(gchar **fields);
@@ -60,9 +60,8 @@ invoice_line_from_csv(gchar **fields)
 }
 
 void
-invoice_pretty_print(gpointer doc_no, gpointer invp, gpointer user_data)
+invoice_pretty_print(Invoice *inv)
 {
-	Invoice *inv = (Invoice*) invp;
 	inv->lines = g_list_sort(inv->lines, invoice_line_compare_by_line_no);
 	g_print("\n"
 	        "+------------------------------------------------------------------------------+\n"
@@ -110,6 +109,6 @@ main(int argc, char **argv)
 		g_error("ERROR: %s\n", error->message);
 	for (int line=0; lines[line]; line++)
 		csv_line_process(lines[line]);
-	//g_hash_table_foreach(db->invoices, invoice_pretty_print, NULL);
+	database_invoices_foreach(invoice_pretty_print);
 	return 0;
 }
