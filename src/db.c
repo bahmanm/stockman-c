@@ -15,13 +15,16 @@ database_get()
 	return db;
 }
 
-Database*
+void
 database_init()
 {
+	if (db) {
+		g_debug("Database already initialised.");
+		return;
+	}
 	g_debug("Initialising the database...");
-	Database* db = g_malloc(sizeof(Database));
+	db = g_malloc(sizeof(Database));
 	db->invoices = g_hash_table_new(g_str_hash, g_str_equal);
-	return db;
 }
 
 gboolean

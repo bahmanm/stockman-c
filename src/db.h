@@ -11,7 +11,7 @@ static Database* db;
  * Initialise the database.
  * Attempt to use an uninitialised database causes the program to abort.
  */
-Database*
+void
 database_init();
 
 /**

@@ -102,7 +102,7 @@ int
 main(int argc, char **argv)
 {
 	g_log_set_writer_func(g_log_writer_standard_streams, NULL, NULL);
-	db = database_init();
+	database_init();
 
 	g_autoptr(GError) error = NULL;
 	gchar **lines;
