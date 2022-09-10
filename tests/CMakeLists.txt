@@ -1,14 +1,20 @@
-include(CTest)
+enable_testing()
 
 add_executable(
-  invoice_tests "invoice_tests.c")
+  models_tests "models_tests.c")
 
 target_link_libraries(
-  invoice_tests
+  models_tests
+  PRIVATE
   ${GLIB_LIBRARIES}
-  ${GIO_LIBRARIES})
+  ${GIO_LIBRARIES}
+  ${PROJECT_NAME}_LIBS)
+
+target_include_directories(
+  models_tests
+  PRIVATE "${CMAKE_SOURCE_DIR}/src/")
 
 add_test(
-  NAME invoice_tests
-  COMMAND invoice_tests
+  NAME models_tests
+  COMMAND models_tests
   CONFIGURATIONS Debug;Release)
