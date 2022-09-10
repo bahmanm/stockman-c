@@ -16,9 +16,6 @@ invoice_pretty_print(Invoice *inv);
 InvoiceLine*
 invoice_line_from_csv(gchar **fields);
 
-GString*
-invoice_line_to_str(InvoiceLine *iline);
-
 void
 csv_line_process(gchar *line);
 
