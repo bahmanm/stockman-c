@@ -40,3 +40,11 @@ database_invoice_get(gchar *doc_no);
  */
 gboolean
 database_invoice_save(Invoice *inv);
+
+/**
+ * Iterate over all invoices and execute a given thunk for each.
+ *
+ * @param thunk Function to execute for each invoice.
+ */
+void
+database_invoices_foreach(void (*thunk)(Invoice*));

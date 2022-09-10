@@ -38,3 +38,17 @@ database_invoice_get(gchar *doc_no)
 {
 	return g_hash_table_lookup(database_get()->invoices, doc_no);
 }
+
+void
+invoices_foreach(gpointer doc_no, gpointer invp, gpointer thunkp)
+{
+	Invoice *inv = (Invoice *)invp;
+	void (*thunk)(Invoice *) = thunkp;
+	thunk(inv);
+}
+
+void
+database_invoices_foreach(void (*thunk)(Invoice *))
+{
+	g_hash_table_foreach(db->invoices, invoices_foreach, thunk);
+}
