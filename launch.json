@@ -4,7 +4,7 @@
       "name": "Debug Stockman-C",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/stockman-c",
+      "program": "${workspaceFolder}/build/src/stockman-c",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
