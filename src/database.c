@@ -1,5 +1,5 @@
 #include <glib.h>
-#include "db.h"
+#include "database.h"
 
 typedef struct Database {
 	GHashTable * invoices;

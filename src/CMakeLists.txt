@@ -1,12 +1,12 @@
 set(
   src_HEADERS
   models.h
-  db.h)
+  database.h)
 
 set(
   src_SOURCES
   models.c
-  db.c)
+  database.c)
 
 add_executable(${PROJECT_NAME} ${src_HEADERS} ${src_SOURCES} main.c)
 add_library(

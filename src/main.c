@@ -2,7 +2,7 @@
 #include <glib.h>
 #include <string.h>
 #include "models.h"
-#include "db.h"
+#include "database.h"
 
 gchar**
 file_get_lines(char *filepath, GError **error);
