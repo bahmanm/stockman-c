@@ -1,27 +1,8 @@
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
-
-typedef struct InvoiceLine {
-	guint line_no;
-	gchar *product;
-	guint qty;
-	gdouble price;
-	gdouble line_amt;
-} InvoiceLine;
-
-typedef struct Invoice {
-	gchar *doc_no;
-	gchar *customer;
-	gchar *date;
-	gdouble total;
-	gdouble discount;
-	GList *lines;
-} Invoice;
-
-typedef struct Database {
-	GHashTable * invoices;
-} Database;
+#include "models.h"
+#include "db.h"
 
 gchar**
 file_get_lines(char *filepath, GError **error);
@@ -32,67 +13,14 @@ invoice_from_csv(gchar **fields);
 void
 invoice_pretty_print(gpointer doc_no, gpointer inv, gpointer user_data);
 
-void
-invoice_add_line(Invoice *inv, InvoiceLine *iline);
-
 InvoiceLine*
 invoice_line_from_csv(gchar **fields);
 
 GString*
 invoice_line_to_str(InvoiceLine *iline);
 
-gint
-invoice_line_compare_by_line_no(gconstpointer iline, gconstpointer other);
-
-const Database*
-database_get();
-
-Database*
-database_init();
-
-Invoice*
-database_invoice_get(gchar *doc_no);
-
-gboolean
-database_invoice_save(Invoice *inv);
-
-gboolean
-database_invoice_update(Invoice *inv);
-
-gboolean
-database_invoice_delete(gchar *doc_no);
-
 void
 csv_line_process(gchar *line);
-
-Database* db;
-
-gboolean
-database_invoice_save(Invoice *inv)
-{
-	if (g_hash_table_lookup(database_get()->invoices, inv->doc_no))
-		return FALSE;
-	g_hash_table_insert(database_get()->invoices, inv->doc_no, inv);
-	return TRUE;
-}
-
-Invoice*
-database_invoice_get(gchar *doc_no)
-{
-	return g_hash_table_lookup(database_get()->invoices, doc_no);
-}
-
-gboolean
-database_invoice_update(Invoice *inv)
-{
-	return g_hash_table_insert(database_get()->invoices, inv->doc_no, inv);
-}
-
-gboolean
-database_invoice_delete(gchar *doc_no)
-{
-	return g_hash_table_remove(database_get()->invoices, doc_no);
-}
 
 
 gchar**
@@ -117,19 +45,6 @@ invoice_from_csv(gchar **fields)
 	inv->discount = g_ascii_strtod(fields[4], NULL);
 	inv->lines = NULL;
 	return inv;
-}
-
-gint
-invoice_line_compare_by_line_no(gconstpointer ilineptr, gconstpointer otherptr)
-{
-	InvoiceLine *iline = (InvoiceLine *)ilineptr;
-	InvoiceLine *other = (InvoiceLine *)otherptr;
-	if (iline->line_no < other->line_no)
-		return -1;
-	else if (iline->line_no == other->line_no)
-		return 0;
-	else
-		return 1;
 }
 
 InvoiceLine*
@@ -171,31 +86,6 @@ invoice_pretty_print(gpointer doc_no, gpointer invp, gpointer user_data)
 }
 
 void
-invoice_add_line(Invoice *inv, InvoiceLine *iline)
-{
-	inv->lines = g_list_prepend(inv->lines, iline);
-}
-
-const Database*
-database_get()
-{
-	if (!db) {
-		g_error("database is NOT initialised.\n");
-		g_abort();
-	}
-	return db;
-}
-
-Database*
-database_init()
-{
-	g_debug("Initialising the database...");
-	Database* db = g_malloc(sizeof(Database));
-	db->invoices = g_hash_table_new(g_str_hash, g_str_equal);
-	return db;
-}
-
-void
 csv_line_process(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
@@ -205,7 +95,7 @@ csv_line_process(gchar *line)
 		inv = invoice_from_csv(fields);
 	InvoiceLine *iline = invoice_line_from_csv(fields);
 	invoice_add_line(inv, iline);
-	database_invoice_update(inv);
+	database_invoice_save(inv);
 }
 
 int
@@ -220,6 +110,6 @@ main(int argc, char **argv)
 		g_error("ERROR: %s\n", error->message);
 	for (int line=0; lines[line]; line++)
 		csv_line_process(lines[line]);
-	g_hash_table_foreach(db->invoices, invoice_pretty_print, NULL);
+	//g_hash_table_foreach(db->invoices, invoice_pretty_print, NULL);
 	return 0;
 }
