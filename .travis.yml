@@ -2,10 +2,8 @@ language: c
 
 compiler: gcc
 
-before_script:
-  - cmake -Bbuild -S.
-  - cd build
-
 script:
+  - cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=Debug
+  - cd build
   - cmake --build .
   - ctest --test-dir tests -C Debug --output_on_failure
