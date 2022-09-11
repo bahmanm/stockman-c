@@ -33,3 +33,20 @@ add_test(
   NAME database_tests
   COMMAND database_tests
   CONFIGURATIONS Debug;Release)
+
+# csvimport tests
+add_executable(
+  csvimport_tests "csvimport_tests.c")
+target_link_libraries(
+  csvimport_tests
+  PRIVATE
+  ${GLIB_LIBRARIES}
+  ${GIO_LIBRARIES}
+  ${PROJECT_NAME}_LIBS)
+target_include_directories(
+  csvimport_tests
+  PRIVATE "${CMAKE_SOURCE_DIR}/src/")
+add_test(
+  NAME csvimport_tests
+  COMMAND csvimport_tests
+  CONFIGURATIONS Debug;Release)

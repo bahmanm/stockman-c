@@ -53,7 +53,7 @@ invoice_line_from_csv(gchar **fields)
 }
 
 void
-csv_line_process(gchar *line)
+csvimport_line_process(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
 	gchar *doc_no = fields[0];

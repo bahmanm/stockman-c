@@ -40,4 +40,4 @@
  * @param line The line from CSV file
  */
 void
-csv_line_process(gchar *line);
+csvimport_line_process(gchar *line);
