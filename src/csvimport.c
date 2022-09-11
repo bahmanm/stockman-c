@@ -17,7 +17,7 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include <glib.h>
-#include "csvload.h"
+#include "csvimport.h"
 #include "database.h"
 #include "models.h"
 
