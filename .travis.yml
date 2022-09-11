@@ -3,7 +3,7 @@ language: c
 compiler: gcc
 
 script:
-  - cmake -Bbuild -S. -DCMAKE_BUILD_TYPE=Debug
+  - cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
   - cd build
   - cmake --build .
   - ctest --test-dir tests -C Debug --output_on_failure
