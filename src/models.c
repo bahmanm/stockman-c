@@ -27,10 +27,10 @@ invoice_add_line(Invoice *inv, InvoiceLine *iline)
 
 
 gint
-invoice_line_compare_by_line_no(gconstpointer ilineptr, gconstpointer otherptr)
+invoice_line_compare_by_line_no(gconstpointer iline_vptr, gconstpointer other_vptr)
 {
-	InvoiceLine *iline = (InvoiceLine *)ilineptr;
-	InvoiceLine *other = (InvoiceLine *)otherptr;
+	InvoiceLine *iline = (InvoiceLine *)iline_vptr;
+	InvoiceLine *other = (InvoiceLine *)other_vptr;
 	if (iline->line_no < other->line_no)
 		return -1;
 	else if (iline->line_no == other->line_no)
