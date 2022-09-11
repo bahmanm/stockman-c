@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "name": "Debug Stockman-C",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/src/stockman-c",
+      "args": [
+        "${workspaceFolder}/tests/resources/sales-invoices-tiny.csv"
+      ],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb"
+    }
+  ]
+}
