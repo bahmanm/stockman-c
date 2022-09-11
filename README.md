@@ -1,12 +1,21 @@
-# Stockman in C
-*Stockman: my favourite set of exercises to learn a new programming language.*
+# Stockman-C: Stockman in C
+*Stockman: my favourite set of exercises to become fluent in a programming language.*
 
 # v1.0
-1. Read a CSV file into memory which contain sales invoice lines.
+1. Read a CSV file into memory which contain sales invoice lines.  Sample files can be found under `/tests/resources/`.
 2. Pretty print the invoices.
 
 ### Status ###
-_TBD_
+Done.
+
+```
+$ git fetch --all --tags && git checkout tags/v1.0 -b v1.0   # checkout the tag
+$ cmake -Bbuild -S.                                          # bootstrap the build
+$ cd build
+$ cmake --build .                                            # build stockman-c
+$ ctest --test-dir tests -C Debug --output-on-failure        # run the tests
+$ src/stockman-c                                             # run stockman-c
+```
 
 # v2.0 #
 1. Read a CSV file into memory which contain sales invoice lines.
