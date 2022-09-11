@@ -5,7 +5,9 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/build/src/stockman-c",
-      "args": [],
+      "args": [
+        "${workspaceFolder}/tests/resources/sales-invoices-tiny.csv"
+      ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],

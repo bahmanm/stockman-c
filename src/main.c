@@ -68,12 +68,16 @@ invoice_pretty_print(Invoice *inv)
 int
 main(int argc, char **argv)
 {
+	if (argc != 2) {
+		g_print("USAGE: stockman-c PATH_TO_CSV_FILE\n");
+		return 0;
+	}
 	g_log_set_writer_func(g_log_writer_standard_streams, NULL, NULL);
 	database_init();
 
 	g_autoptr(GError) error = NULL;
 	gchar **lines;
-	if (!(lines = file_get_lines("/home/bahman/tmp/sales-invoices-tiny.csv", &error)))
+	if (!(lines = file_get_lines(argv[1], &error)))
 		g_error("ERROR: %s\n", error->message);
 	for (int line=0; lines[line]; line++)
 		csv_line_process(lines[line]);
