@@ -1,4 +1,4 @@
-# Stockman-C: Stockman in C
+# Stockman-C: Stockman in C  [![Build Status](https://app.travis-ci.com/bahmanm/stockman-c.svg?branch=main)](https://app.travis-ci.com/bahmanm/stockman-c)
 *Stockman: my favourite set of exercises to become fluent in a programming language.*
 
 # v1.0
