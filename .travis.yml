@@ -1,13 +1,15 @@
+dist: jammy
 language: c
-
 compiler: gcc
 
 addons:
   apt:
     packages:
     - libglib2.0-0
-    - libglib2.0-dev-bin
     - libglib2.0-dev
+    - libglib2.0-dev-bin
+    - libglib2.0-bin
+    - libglib2.0-data
 
 before_script:
   - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.24.1/cmake-3.24.1-linux-x86_64.tar.gz
