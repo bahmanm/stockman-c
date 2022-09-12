@@ -44,7 +44,7 @@ Database_get();
  * @param doc_no Invoice number
  * @return Invoice if exists, `NULL` otherwise.
  */
-Invoice*
+Models_Invoice*
 Database_Invoice_get(gchar *doc_no);
 
 /**
@@ -57,7 +57,7 @@ Database_Invoice_get(gchar *doc_no);
  * @return `TRUE` if successful, `FALSE` otherwise.
  */
 gboolean
-Database_Invoice_save(Invoice *inv);
+Database_Invoice_save(Models_Invoice *inv);
 
 /**
  * Iterate over all invoices and execute a given thunk for each.
@@ -65,7 +65,7 @@ Database_Invoice_save(Invoice *inv);
  * @param thunk Function to execute for each invoice.
  */
 void
-Database_Invoice_foreach(void (*thunk)(Invoice*));
+Database_Invoice_foreach(void (*thunk)(Models_Invoice*));
 
 /**
  * Remove all invoices from the database.
@@ -74,4 +74,4 @@ Database_Invoice_foreach(void (*thunk)(Invoice*));
  *        mainly to free up the memory.
  */
 void
-Database_Invoice_clear(void (*invoice_destroy_thunk)(Invoice *));
+Database_Invoice_clear(void (*invoice_destroy_thunk)(Models_Invoice *));

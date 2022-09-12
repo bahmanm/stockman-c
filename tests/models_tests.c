@@ -23,15 +23,15 @@ void
 test_Invoice_addLine()
 {
 	// GIVEN
-	Invoice inv = {.lines = NULL};
-	InvoiceLine iline1 = {.line_no = 10, .product = "P1"};
-	InvoiceLine iline2 = {.line_no = 20, .product = "P2"};
+	Models_Invoice inv = {.lines = NULL};
+	Models_InvoiceLine iline1 = {.line_no = 10, .product = "P1"};
+	Models_InvoiceLine iline2 = {.line_no = 20, .product = "P2"};
 
 	// EXPECT
 	g_assert_null(inv.lines);
 
 	// WHEN
-	Invoice_addLine(&inv, &iline1);
+	Models_Invoice_addLine(&inv, &iline1);
 
 	// THEN
 	g_assert_nonnull(inv.lines);
@@ -39,7 +39,7 @@ test_Invoice_addLine()
 	g_assert_nonnull(g_list_find(inv.lines, &iline1));
 
 	// WHEN
-	Invoice_addLine(&inv, &iline2);
+	Models_Invoice_addLine(&inv, &iline2);
 
 	// THEN
 	g_assert_cmpint(2, ==, g_list_length(inv.lines));
@@ -51,13 +51,13 @@ void
 test_InvoiceLine_compareByLineNo()
 {
 	// GIVEN
-	InvoiceLine iline1 = {.line_no = 10};
-	InvoiceLine iline2 = {.line_no = 20};
+	Models_InvoiceLine iline1 = {.line_no = 10};
+	Models_InvoiceLine iline2 = {.line_no = 20};
 
 	// EXPECT
-	g_assert_cmpint(0, ==, InvoiceLine_compareByLineNo(&iline1, &iline1));
-	g_assert_cmpint(0, >, InvoiceLine_compareByLineNo(&iline1, &iline2));
-	g_assert_cmpint(0, <, InvoiceLine_compareByLineNo(&iline2, &iline1));
+	g_assert_cmpint(0, ==, Models_InvoiceLine_compareByLineNo(&iline1, &iline1));
+	g_assert_cmpint(0, >, Models_InvoiceLine_compareByLineNo(&iline1, &iline2));
+	g_assert_cmpint(0, <, Models_InvoiceLine_compareByLineNo(&iline2, &iline1));
 }
 
 int

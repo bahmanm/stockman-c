@@ -36,7 +36,7 @@ database_teardown()
 gboolean
 invoice_line_has_line_no(const void *iline_vptr, const void *line_no_vptr)
 {
-	InvoiceLine *iline = (InvoiceLine *)iline_vptr;
+	Models_InvoiceLine *iline = (Models_InvoiceLine *)iline_vptr;
 	guint line_no = *(guint *)line_no_vptr;
 	if (line_no == iline->line_no)
 		return TRUE;
@@ -57,7 +57,7 @@ test_CsvImport_processLine__existing_invoice()
 	CsvImport_processLine(csvline2);
 
 	/* THEN */
-	Invoice *inv = Database_Invoice_get("SI-862");
+	Models_Invoice *inv = Database_Invoice_get("SI-862");
 	g_assert_nonnull(inv);
 	g_assert_cmpstr("SI-862", ==, inv->doc_no);
 	g_assert_cmpstr("C-114", ==, inv->customer);
@@ -70,7 +70,7 @@ test_CsvImport_processLine__existing_invoice()
 	guint line_no = 2;
 	GList *node = g_list_find_custom(inv->lines, &line_no, invoice_line_has_line_no);
 	g_assert_nonnull(node);
-	InvoiceLine *iline = node->data;
+	Models_InvoiceLine *iline = node->data;
 	g_assert_cmpint(1, ==, iline->line_no);
 	g_assert_cmpstr("P-7964", ==, iline->product);
 	g_assert_cmpint(192, ==, iline->qty);
@@ -89,7 +89,7 @@ test_CsvImport_processLine__new_invoice()
 	CsvImport_processLine(csvline);
 
 	/* THEN */
-	Invoice *inv = Database_Invoice_get("SI-862");
+	Models_Invoice *inv = Database_Invoice_get("SI-862");
 	g_assert_nonnull(inv);
 	g_assert_cmpstr("SI-862", ==, inv->doc_no);
 	g_assert_cmpstr("C-114", ==, inv->customer);
@@ -99,7 +99,7 @@ test_CsvImport_processLine__new_invoice()
 
 	g_assert_nonnull(inv->lines);
 	g_assert_cmpint(1, ==, g_list_length(inv->lines));
-	InvoiceLine *iline = inv->lines->data;
+	Models_InvoiceLine *iline = inv->lines->data;
 	g_assert_cmpint(1, ==, iline->line_no);
 	g_assert_cmpstr("P-7964", ==, iline->product);
 	g_assert_cmpint(192, ==, iline->qty);

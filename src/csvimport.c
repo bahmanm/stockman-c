@@ -21,16 +21,16 @@
 #include "database.h"
 #include "models.h"
 
-Invoice*
+Models_Invoice*
 invoice_from_csv(gchar **fields);
 
-InvoiceLine*
+Models_InvoiceLine*
 invoice_line_from_csv(gchar **fields);
 
-Invoice*
+Models_Invoice*
 invoice_from_csv(gchar **fields)
 {
-	Invoice *inv = g_malloc(sizeof(Invoice));
+	Models_Invoice *inv = g_malloc(sizeof(Models_Invoice));
 	inv->doc_no = fields[0];
 	inv->customer = fields[1];
 	inv->date = fields[2];
@@ -40,10 +40,10 @@ invoice_from_csv(gchar **fields)
 	return inv;
 }
 
-InvoiceLine*
+Models_InvoiceLine*
 invoice_line_from_csv(gchar **fields)
 {
-	InvoiceLine *iline = g_malloc(sizeof(InvoiceLine));
+	Models_InvoiceLine *iline = g_malloc(sizeof(Models_InvoiceLine));
 	iline->line_no = g_ascii_strtoull(fields[5], NULL, 10);
 	iline->product = fields[6];
 	iline->qty = g_ascii_strtoull(fields[7], NULL, 10);
@@ -57,10 +57,10 @@ CsvImport_processLine(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
 	gchar *doc_no = fields[0];
-	Invoice *inv = Database_Invoice_get(doc_no);
+	Models_Invoice *inv = Database_Invoice_get(doc_no);
 	if (!inv)
 		inv = invoice_from_csv(fields);
-	InvoiceLine *iline = invoice_line_from_csv(fields);
-	Invoice_addLine(inv, iline);
+	Models_InvoiceLine *iline = invoice_line_from_csv(fields);
+	Models_Invoice_addLine(inv, iline);
 	Database_Invoice_save(inv);
 }

@@ -27,7 +27,7 @@ gchar**
 file_get_lines(char *filepath, GError **error);
 
 void
-invoice_pretty_print(Invoice *inv);
+invoice_pretty_print(Models_Invoice *inv);
 
 gchar**
 file_get_lines(char *filepath, GError **error)
@@ -41,9 +41,9 @@ file_get_lines(char *filepath, GError **error)
 }
 
 void
-invoice_pretty_print(Invoice *inv)
+invoice_pretty_print(Models_Invoice *inv)
 {
-	inv->lines = g_list_sort(inv->lines, InvoiceLine_compareByLineNo);
+	inv->lines = g_list_sort(inv->lines, Models_InvoiceLine_compareByLineNo);
 	g_print("\n"
 	        "+------------------------------------------------------------------------------+\n"
 	        "| INVOICE#: %-35s  DATE:       %-10s        |\n"
@@ -54,7 +54,7 @@ invoice_pretty_print(Invoice *inv)
 	        inv->doc_no, inv->date,
 	        inv->customer, inv->discount);
 	for (GList *iline = inv->lines; iline; iline = iline->next) {
-		InvoiceLine *data = iline->data;
+		Models_InvoiceLine *data = iline->data;
 		g_print("| %3d   %-26s     %8d   %10.2f   %15.2f |\n",
 		        data->line_no, data->product,
 		        data->qty, data->price, data->line_amt);
