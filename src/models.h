@@ -44,7 +44,7 @@ typedef struct Invoice {
  * @param iline Invoice line
  */
 void
-invoice_add_line(Invoice *inv, InvoiceLine *iline);
+Invoice_addLine(Invoice *inv, InvoiceLine *iline);
 
 /**
  * Compare a given invoice line with another line by `line_no`.
@@ -55,4 +55,4 @@ invoice_add_line(Invoice *inv, InvoiceLine *iline);
  *         equal and 1 if the given invoice line has a larger `line_no`.
  */
 gint
-invoice_line_compare_by_line_no(gconstpointer iline, gconstpointer other);
+InvoiceLine_compareByLineNo(gconstpointer iline, gconstpointer other);

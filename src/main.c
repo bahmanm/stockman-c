@@ -43,7 +43,7 @@ file_get_lines(char *filepath, GError **error)
 void
 invoice_pretty_print(Invoice *inv)
 {
-	inv->lines = g_list_sort(inv->lines, invoice_line_compare_by_line_no);
+	inv->lines = g_list_sort(inv->lines, InvoiceLine_compareByLineNo);
 	g_print("\n"
 	        "+------------------------------------------------------------------------------+\n"
 	        "| INVOICE#: %-35s  DATE:       %-10s        |\n"
@@ -73,14 +73,14 @@ main(int argc, char **argv)
 		return 0;
 	}
 	g_log_set_writer_func(g_log_writer_standard_streams, NULL, NULL);
-	database_init();
+	Database_init();
 
 	g_autoptr(GError) error = NULL;
 	gchar **lines;
 	if (!(lines = file_get_lines(argv[1], &error)))
 		g_error("ERROR: %s\n", error->message);
 	for (int line=0; lines[line]; line++)
-		csvimport_line_process(lines[line]);
-	database_invoices_foreach(invoice_pretty_print);
+		CsvImport_processLine(lines[line]);
+	Database_Invoice_foreach(invoice_pretty_print);
 	return 0;
 }

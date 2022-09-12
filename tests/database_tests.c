@@ -23,26 +23,26 @@
 void
 database_setup()
 {
-	database_init();
+	Database_init();
 }
 
 void
 database_teardown()
 {
-	database_invoices_clear(NULL);
+	Database_Invoice_clear(NULL);
 }
 
 void
-test_database_invoice_get_and_save()
+test_Database_Invoice_get_and_save()
 {
 	/* GIVEN */
 	Invoice inv = {.doc_no = "I1", .lines = NULL};
 
 	/* WHEN */
-	database_invoice_save(&inv);
+	Database_Invoice_save(&inv);
 
 	/* THEN */
-	Invoice *actual = database_invoice_get("I1");
+	Invoice *actual = Database_Invoice_get("I1");
 	g_assert_cmpstr("I1", ==, actual->doc_no);
 }
 
@@ -57,16 +57,16 @@ invoices_foreach_thunk(Invoice * inv)
 }
 
 void
-test_database_invoices_foreach()
+test_Database_Invoice_foreach()
 {
 	/* GIVEN */
 	Invoice inv1 = {.doc_no = "I1", .lines = NULL};
-	database_invoice_save(&inv1);
+	Database_Invoice_save(&inv1);
 	Invoice inv2 = {.doc_no = "I2", .lines = NULL};
-	database_invoice_save(&inv2);
+	Database_Invoice_save(&inv2);
 
 	/* WHEN */
-	database_invoices_foreach(invoices_foreach_thunk);
+	Database_Invoice_foreach(invoices_foreach_thunk);
 
 	/* THEN */
 	g_assert_cmpint(2, ==, invoices_foreach_thunk_counter);
@@ -77,31 +77,31 @@ test_database_invoices_foreach()
 }
 
 void
-test_database_invoices_clear()
+test_Database_Invoice_clear()
 {
 	/* GIVEN */
 	Invoice inv1 = {.doc_no = "I1", .lines = NULL};
-	database_invoice_save(&inv1);
+	Database_Invoice_save(&inv1);
 
 	/* WHEN */
-	database_invoices_clear(NULL);
+	Database_Invoice_clear(NULL);
 
 	/* THEN */
-	g_assert_null(database_invoice_get("I1"));
+	g_assert_null(Database_Invoice_get("I1"));
 }
 
 int
 main(int argc, char **argv)
 {
 	g_test_init(&argc, &argv, NULL);
-	g_test_add("/database/invoices/get_and_save",
+	g_test_add("/Database/Invoice/get_and_save",
 	           gpointer, NULL,
-	           database_setup, test_database_invoice_get_and_save, database_teardown);
-	g_test_add("/database/invoices/foreach",
+	           database_setup, test_Database_Invoice_get_and_save, database_teardown);
+	g_test_add("/Database/Invoice/foreach",
 	           gpointer, NULL,
-	           database_setup, test_database_invoices_foreach, database_teardown);
-	g_test_add("/database/invoices/clear",
+	           database_setup, test_Database_Invoice_foreach, database_teardown);
+	g_test_add("/Database/Invoice/clear",
 	           gpointer, NULL,
-	           database_setup, test_database_invoices_clear, database_teardown);
+	           database_setup, test_Database_Invoice_clear, database_teardown);
 	return g_test_run();
 }

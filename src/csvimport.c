@@ -53,14 +53,14 @@ invoice_line_from_csv(gchar **fields)
 }
 
 void
-csvimport_line_process(gchar *line)
+CsvImport_processLine(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
 	gchar *doc_no = fields[0];
-	Invoice *inv = database_invoice_get(doc_no);
+	Invoice *inv = Database_Invoice_get(doc_no);
 	if (!inv)
 		inv = invoice_from_csv(fields);
 	InvoiceLine *iline = invoice_line_from_csv(fields);
-	invoice_add_line(inv, iline);
-	database_invoice_save(inv);
+	Invoice_addLine(inv, iline);
+	Database_Invoice_save(inv);
 }

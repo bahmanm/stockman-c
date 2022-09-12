@@ -20,14 +20,14 @@
 #include "models.h"
 
 void
-invoice_add_line(Invoice *inv, InvoiceLine *iline)
+Invoice_addLine(Invoice *inv, InvoiceLine *iline)
 {
 	inv->lines = g_list_prepend(inv->lines, iline);
 }
 
 
 gint
-invoice_line_compare_by_line_no(gconstpointer iline_vptr, gconstpointer other_vptr)
+InvoiceLine_compareByLineNo(gconstpointer iline_vptr, gconstpointer other_vptr)
 {
 	InvoiceLine *iline = (InvoiceLine *)iline_vptr;
 	InvoiceLine *other = (InvoiceLine *)other_vptr;

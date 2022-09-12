@@ -29,14 +29,14 @@ static Database* db;
  * Initialise the database.
  */
 void
-database_init();
+Database_init();
 
 /**
  * Returns the initialised database instance.
  * Attempt to `get` an uninitialised database causes the program to abort.
  */
 const Database*
-database_get();
+Database_get();
 
 /**
  * Find an invoice.
@@ -45,7 +45,7 @@ database_get();
  * @return Invoice if exists, `NULL` otherwise.
  */
 Invoice*
-database_invoice_get(gchar *doc_no);
+Database_Invoice_get(gchar *doc_no);
 
 /**
  * Persist an invoice.
@@ -57,7 +57,7 @@ database_invoice_get(gchar *doc_no);
  * @return `TRUE` if successful, `FALSE` otherwise.
  */
 gboolean
-database_invoice_save(Invoice *inv);
+Database_Invoice_save(Invoice *inv);
 
 /**
  * Iterate over all invoices and execute a given thunk for each.
@@ -65,7 +65,7 @@ database_invoice_save(Invoice *inv);
  * @param thunk Function to execute for each invoice.
  */
 void
-database_invoices_foreach(void (*thunk)(Invoice*));
+Database_Invoice_foreach(void (*thunk)(Invoice*));
 
 /**
  * Remove all invoices from the database.
@@ -74,4 +74,4 @@ database_invoices_foreach(void (*thunk)(Invoice*));
  *        mainly to free up the memory.
  */
 void
-database_invoices_clear(void (*invoice_destroy_thunk)(Invoice *));
+Database_Invoice_clear(void (*invoice_destroy_thunk)(Invoice *));
