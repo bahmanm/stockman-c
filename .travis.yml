@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
     - libglib2.0-0
+    - libglib2.0-dev-bin
     - libglib2.0-dev
 
 before_script:
