@@ -2,13 +2,11 @@ dist: jammy
 language: c
 compiler: gcc
 
-addons:
-  apt:
-    sources:
-    - sourceline: deb https://apt.kitware.com/ubuntu/ jammy main
-      key_url: https://apt.kitware.com/keys/kitware-archive-latest.asc
-    packages:
-    - cmake
+before_script:
+  - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.24.1/cmake-3.24.1-linux-x86_64.tar.gz
+  - tar -xzf cmake-3.24.1-linux-x86_64.tar.gz > /dev/null
+  - PATH=$(pwd)/cmake-3.24.1-linux-x86_64:$(pwd)/cmake-3.24.1-linux-x86_64/bin:$PATH
+  - cd $TRAVIS_BUILD_DIR
 
 script:
   - cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
