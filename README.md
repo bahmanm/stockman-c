@@ -1,7 +1,7 @@
 # Stockman-C: Stockman in C  [![Build Status](https://app.travis-ci.com/bahmanm/stockman-c.svg?branch=main)](https://app.travis-ci.com/bahmanm/stockman-c)
 *Stockman: my favourite set of exercises to become fluent in a programming language.*
 
-# v1.0
+# :heavy_check_mark: v1.0
 1. Read a CSV file into memory which contain sales invoice lines.  Sample files can be found under `/tests/resources/`.
 2. Pretty print the invoices.
 
