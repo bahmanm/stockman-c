@@ -20,22 +20,22 @@
 
 #include <glib.h>
 
-typedef struct InvoiceLine {
+typedef struct Models_InvoiceLine {
 	guint line_no;
 	gchar *product;
 	guint qty;
 	gdouble price;
 	gdouble line_amt;
-} InvoiceLine;
+} Models_InvoiceLine;
 
-typedef struct Invoice {
+typedef struct Models_Invoice {
 	gchar *doc_no;
 	gchar *customer;
 	gchar *date;
 	gdouble total;
 	gdouble discount;
 	GList *lines;
-} Invoice;
+} Models_Invoice;
 
 /**
  * Add a line to the invoice.
@@ -44,7 +44,7 @@ typedef struct Invoice {
  * @param iline Invoice line
  */
 void
-invoice_add_line(Invoice *inv, InvoiceLine *iline);
+Models_Invoice_addLine(Models_Invoice *inv, Models_InvoiceLine *iline);
 
 /**
  * Compare a given invoice line with another line by `line_no`.
@@ -55,4 +55,4 @@ invoice_add_line(Invoice *inv, InvoiceLine *iline);
  *         equal and 1 if the given invoice line has a larger `line_no`.
  */
 gint
-invoice_line_compare_by_line_no(gconstpointer iline, gconstpointer other);
+Models_InvoiceLine_compareByLineNo(gconstpointer iline, gconstpointer other);

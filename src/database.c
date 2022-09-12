@@ -24,7 +24,7 @@ typedef struct Database {
 } Database;
 
 const Database*
-database_get()
+Database_get()
 {
 	if (!db) {
 		g_error("database is NOT initialised.\n");
@@ -34,7 +34,7 @@ database_get()
 }
 
 void
-database_init()
+Database_init()
 {
 	if (db) {
 		g_debug("Database already initialised.");
@@ -46,37 +46,37 @@ database_init()
 }
 
 gboolean
-database_invoice_save(Invoice *inv)
+Database_Invoice_save(Models_Invoice *inv)
 {
-	return g_hash_table_insert(database_get()->invoices, inv->doc_no, inv);
+	return g_hash_table_insert(Database_get()->invoices, inv->doc_no, inv);
 }
 
-Invoice*
-database_invoice_get(gchar *doc_no)
+Models_Invoice*
+Database_Invoice_get(gchar *doc_no)
 {
-	return g_hash_table_lookup(database_get()->invoices, doc_no);
+	return g_hash_table_lookup(Database_get()->invoices, doc_no);
 }
 
 void
 invoices_foreach(gpointer doc_no, gpointer invp, gpointer thunkp)
 {
-	Invoice *inv = (Invoice *)invp;
-	void (*thunk)(Invoice *) = thunkp;
+	Models_Invoice *inv = (Models_Invoice *)invp;
+	void (*thunk)(Models_Invoice *) = thunkp;
 	thunk(inv);
 }
 
 void
-database_invoices_foreach(void (*thunk)(Invoice *))
+Database_Invoice_foreach(void (*thunk)(Models_Invoice *))
 {
 	g_hash_table_foreach(db->invoices, invoices_foreach, thunk);
 }
 
 void
-database_invoices_clear(void (*invoice_destroy_thunk)(Invoice *))
+Database_Invoice_clear(void (*invoice_destroy_thunk)(Models_Invoice *))
 {
 	g_autoptr(GList) keys = g_hash_table_get_keys(db->invoices);
 	for (GList *key = keys; key; key = key->next) {
-		Invoice *inv = g_hash_table_lookup(db->invoices, key);
+		Models_Invoice *inv = g_hash_table_lookup(db->invoices, key);
 		if (invoice_destroy_thunk)
 			invoice_destroy_thunk(inv);
 		g_hash_table_remove(db->invoices, key->data);

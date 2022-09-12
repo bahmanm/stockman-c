@@ -20,17 +20,17 @@
 #include "models.h"
 
 void
-invoice_add_line(Invoice *inv, InvoiceLine *iline)
+Models_Invoice_addLine(Models_Invoice *inv, Models_InvoiceLine *iline)
 {
 	inv->lines = g_list_prepend(inv->lines, iline);
 }
 
 
 gint
-invoice_line_compare_by_line_no(gconstpointer iline_vptr, gconstpointer other_vptr)
+Models_InvoiceLine_compareByLineNo(gconstpointer iline_vptr, gconstpointer other_vptr)
 {
-	InvoiceLine *iline = (InvoiceLine *)iline_vptr;
-	InvoiceLine *other = (InvoiceLine *)other_vptr;
+	Models_InvoiceLine *iline = (Models_InvoiceLine *)iline_vptr;
+	Models_InvoiceLine *other = (Models_InvoiceLine *)other_vptr;
 	if (iline->line_no < other->line_no)
 		return -1;
 	else if (iline->line_no == other->line_no)
