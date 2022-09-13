@@ -17,7 +17,6 @@ find_package (GLib)
 add_subdirectory(src)
 add_subdirectory(tests)
 
-
 add_custom_target (
   format ALL
   COMMAND ${CMAKE_COMMAND} -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR} -P${PROJECT_SOURCE_DIR}/cmake/reformat.cmake)

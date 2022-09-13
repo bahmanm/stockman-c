@@ -17,7 +17,7 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include <glib.h>
-#include "database.h"
+#include "Database.h"
 
 typedef struct Database {
 	GHashTable * invoices;
@@ -46,12 +46,12 @@ Database_init()
 }
 
 gboolean
-Database_Invoice_save(Models_Invoice *inv)
+Database_Invoice_save(Model_Invoice *inv)
 {
 	return g_hash_table_insert(Database_get()->invoices, inv->doc_no, inv);
 }
 
-Models_Invoice*
+Model_Invoice*
 Database_Invoice_get(gchar *doc_no)
 {
 	return g_hash_table_lookup(Database_get()->invoices, doc_no);
@@ -60,23 +60,23 @@ Database_Invoice_get(gchar *doc_no)
 void
 invoices_foreach(gpointer doc_no, gpointer invp, gpointer thunkp)
 {
-	Models_Invoice *inv = (Models_Invoice *)invp;
-	void (*thunk)(Models_Invoice *) = thunkp;
+	Model_Invoice *inv = (Model_Invoice *)invp;
+	void (*thunk)(Model_Invoice *) = thunkp;
 	thunk(inv);
 }
 
 void
-Database_Invoice_foreach(void (*thunk)(Models_Invoice *))
+Database_Invoice_foreach(void (*thunk)(Model_Invoice *))
 {
 	g_hash_table_foreach(db->invoices, invoices_foreach, thunk);
 }
 
 void
-Database_Invoice_clear(void (*invoice_destroy_thunk)(Models_Invoice *))
+Database_Invoice_clear(void (*invoice_destroy_thunk)(Model_Invoice *))
 {
 	g_autoptr(GList) keys = g_hash_table_get_keys(db->invoices);
 	for (GList *key = keys; key; key = key->next) {
-		Models_Invoice *inv = g_hash_table_lookup(db->invoices, key);
+		Model_Invoice *inv = g_hash_table_lookup(db->invoices, key);
 		if (invoice_destroy_thunk)
 			invoice_destroy_thunk(inv);
 		g_hash_table_remove(db->invoices, key->data);

@@ -19,15 +19,15 @@
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
-#include "models.h"
-#include "database.h"
-#include "csvimport.h"
+#include "Model.h"
+#include "Database.h"
+#include "CsvImport.h"
 
 gchar**
 file_get_lines(char *filepath, GError **error);
 
 void
-invoice_pretty_print(Models_Invoice *inv);
+invoice_pretty_print(Model_Invoice *inv);
 
 gchar**
 file_get_lines(char *filepath, GError **error)
@@ -41,9 +41,9 @@ file_get_lines(char *filepath, GError **error)
 }
 
 void
-invoice_pretty_print(Models_Invoice *inv)
+invoice_pretty_print(Model_Invoice *inv)
 {
-	inv->lines = g_list_sort(inv->lines, Models_InvoiceLine_compareByLineNo);
+	inv->lines = g_list_sort(inv->lines, Model_InvoiceLine_compareByLineNo);
 	g_print("\n"
 	        "+------------------------------------------------------------------------------+\n"
 	        "| INVOICE#: %-35s  DATE:       %-10s        |\n"
@@ -54,7 +54,7 @@ invoice_pretty_print(Models_Invoice *inv)
 	        inv->doc_no, inv->date,
 	        inv->customer, inv->discount);
 	for (GList *iline = inv->lines; iline; iline = iline->next) {
-		Models_InvoiceLine *data = iline->data;
+		Model_InvoiceLine *data = iline->data;
 		g_print("| %3d   %-26s     %8d   %10.2f   %15.2f |\n",
 		        data->line_no, data->product,
 		        data->qty, data->price, data->line_amt);

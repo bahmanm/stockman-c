@@ -17,20 +17,20 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include <glib.h>
-#include "models.h"
+#include "Model.h"
 
 void
-Models_Invoice_addLine(Models_Invoice *inv, Models_InvoiceLine *iline)
+Model_Invoice_addLine(Model_Invoice *inv, Model_InvoiceLine *iline)
 {
 	inv->lines = g_list_prepend(inv->lines, iline);
 }
 
 
 gint
-Models_InvoiceLine_compareByLineNo(gconstpointer iline_vptr, gconstpointer other_vptr)
+Model_InvoiceLine_compareByLineNo(gconstpointer iline_vptr, gconstpointer other_vptr)
 {
-	Models_InvoiceLine *iline = (Models_InvoiceLine *)iline_vptr;
-	Models_InvoiceLine *other = (Models_InvoiceLine *)other_vptr;
+	Model_InvoiceLine *iline = (Model_InvoiceLine *)iline_vptr;
+	Model_InvoiceLine *other = (Model_InvoiceLine *)other_vptr;
 	if (iline->line_no < other->line_no)
 		return -1;
 	else if (iline->line_no == other->line_no)

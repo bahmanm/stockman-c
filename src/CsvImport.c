@@ -17,20 +17,20 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include <glib.h>
-#include "csvimport.h"
-#include "database.h"
-#include "models.h"
+#include "CsvImport.h"
+#include "Database.h"
+#include "Model.h"
 
-Models_Invoice*
+Model_Invoice*
 invoice_from_csv(gchar **fields);
 
-Models_InvoiceLine*
+Model_InvoiceLine*
 invoice_line_from_csv(gchar **fields);
 
-Models_Invoice*
+Model_Invoice*
 invoice_from_csv(gchar **fields)
 {
-	Models_Invoice *inv = g_malloc(sizeof(Models_Invoice));
+	Model_Invoice *inv = g_malloc(sizeof(Model_Invoice));
 	inv->doc_no = fields[0];
 	inv->customer = fields[1];
 	inv->date = fields[2];
@@ -40,10 +40,10 @@ invoice_from_csv(gchar **fields)
 	return inv;
 }
 
-Models_InvoiceLine*
+Model_InvoiceLine*
 invoice_line_from_csv(gchar **fields)
 {
-	Models_InvoiceLine *iline = g_malloc(sizeof(Models_InvoiceLine));
+	Model_InvoiceLine *iline = g_malloc(sizeof(Model_InvoiceLine));
 	iline->line_no = g_ascii_strtoull(fields[5], NULL, 10);
 	iline->product = fields[6];
 	iline->qty = g_ascii_strtoull(fields[7], NULL, 10);
@@ -57,10 +57,10 @@ CsvImport_processLine(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
 	gchar *doc_no = fields[0];
-	Models_Invoice *inv = Database_Invoice_get(doc_no);
+	Model_Invoice *inv = Database_Invoice_get(doc_no);
 	if (!inv)
 		inv = invoice_from_csv(fields);
-	Models_InvoiceLine *iline = invoice_line_from_csv(fields);
-	Models_Invoice_addLine(inv, iline);
+	Model_InvoiceLine *iline = invoice_line_from_csv(fields);
+	Model_Invoice_addLine(inv, iline);
 	Database_Invoice_save(inv);
 }
