@@ -1,52 +1,52 @@
 enable_testing()
 
-# models tests
+# Model tests
 add_executable(
-  models_tests "models_tests.c")
+  Model_tests "Model_tests.c")
 target_link_libraries(
-  models_tests
+  Model_tests
   PRIVATE
   ${GLIB_LIBRARIES}
   ${GIO_LIBRARIES}
   ${PROJECT_NAME}_LIBS)
 target_include_directories(
-  models_tests
+  Model_tests
   PRIVATE "${CMAKE_SOURCE_DIR}/src/")
 add_test(
-  NAME models_tests
-  COMMAND models_tests
+  NAME Model_tests
+  COMMAND Model_tests
   CONFIGURATIONS Debug;Release)
 
-# database_tests
+# Database_tests
 add_executable(
-  database_tests "database_tests.c")
+  Database_tests "Database_tests.c")
 target_include_directories(
-  database_tests
+  Database_tests
   PRIVATE "${CMAKE_SOURCE_DIR}/src/")
 target_link_libraries(
-  database_tests
+  Database_tests
   PRIVATE
   ${GLIB_LIBRARIES}
   ${GIO_LIBRARIES}
   ${PROJECT_NAME}_LIBS)
 add_test(
-  NAME database_tests
-  COMMAND database_tests
+  NAME Database_tests
+  COMMAND Database_tests
   CONFIGURATIONS Debug;Release)
 
-# csvimport tests
+# CsvImport tests
 add_executable(
-  csvimport_tests "csvimport_tests.c")
+  CsvImport_tests "CsvImport_tests.c")
 target_link_libraries(
-  csvimport_tests
+  CsvImport_tests
   PRIVATE
   ${GLIB_LIBRARIES}
   ${GIO_LIBRARIES}
   ${PROJECT_NAME}_LIBS)
 target_include_directories(
-  csvimport_tests
+  CsvImport_tests
   PRIVATE "${CMAKE_SOURCE_DIR}/src/")
 add_test(
-  NAME csvimport_tests
-  COMMAND csvimport_tests
+  NAME CsvImport_tests
+  COMMAND CsvImport_tests
   CONFIGURATIONS Debug;Release)

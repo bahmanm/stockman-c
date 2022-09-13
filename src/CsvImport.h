@@ -18,7 +18,7 @@
  */
 #pragma once
 #include <glib.h>
-#include "models.h"
+#include "Model.h"
 
 /**
  * Load a line from the invoices CSV file.

@@ -17,8 +17,8 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include <glib.h>
-#include "database.h"
-#include "models.h"
+#include "Database.h"
+#include "Model.h"
 
 void
 database_setup()
@@ -36,13 +36,13 @@ void
 test_Database_Invoice_get_and_save()
 {
 	/* GIVEN */
-	Models_Invoice inv = {.doc_no = "I1", .lines = NULL};
+	Model_Invoice inv = {.doc_no = "I1", .lines = NULL};
 
 	/* WHEN */
 	Database_Invoice_save(&inv);
 
 	/* THEN */
-	Models_Invoice *actual = Database_Invoice_get("I1");
+	Model_Invoice *actual = Database_Invoice_get("I1");
 	g_assert_cmpstr("I1", ==, actual->doc_no);
 }
 
@@ -50,7 +50,7 @@ guint invoices_foreach_thunk_counter  = 0;
 gchar *invoices_foreach_thunk_doc_nos[2] = {NULL, NULL};
 
 void
-invoices_foreach_thunk(Models_Invoice * inv)
+invoices_foreach_thunk(Model_Invoice * inv)
 {
 	invoices_foreach_thunk_doc_nos[invoices_foreach_thunk_counter] = inv->doc_no;
 	invoices_foreach_thunk_counter += 1;
@@ -60,9 +60,9 @@ void
 test_Database_Invoice_foreach()
 {
 	/* GIVEN */
-	Models_Invoice inv1 = {.doc_no = "I1", .lines = NULL};
+	Model_Invoice inv1 = {.doc_no = "I1", .lines = NULL};
 	Database_Invoice_save(&inv1);
-	Models_Invoice inv2 = {.doc_no = "I2", .lines = NULL};
+	Model_Invoice inv2 = {.doc_no = "I2", .lines = NULL};
 	Database_Invoice_save(&inv2);
 
 	/* WHEN */
@@ -80,7 +80,7 @@ void
 test_Database_Invoice_clear()
 {
 	/* GIVEN */
-	Models_Invoice inv1 = {.doc_no = "I1", .lines = NULL};
+	Model_Invoice inv1 = {.doc_no = "I1", .lines = NULL};
 	Database_Invoice_save(&inv1);
 
 	/* WHEN */

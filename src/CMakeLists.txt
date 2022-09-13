@@ -1,14 +1,14 @@
 set(
   src_HEADERS
-  models.h
-  database.h
-  csvimport.h)
+  Model.h
+  Database.h
+  CsvImport.h)
 
 set(
   src_SOURCES
-  models.c
-  database.c
-  csvimport.c)
+  Model.c
+  Database.c
+  CsvImport.c)
 
 add_executable(${PROJECT_NAME} ${src_HEADERS} ${src_SOURCES} main.c)
 add_library(

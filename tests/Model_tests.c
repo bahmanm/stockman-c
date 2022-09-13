@@ -17,21 +17,21 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include <glib.h>
-#include "models.h"
+#include "Model.h"
 
 void
 test_Invoice_addLine()
 {
 	// GIVEN
-	Models_Invoice inv = {.lines = NULL};
-	Models_InvoiceLine iline1 = {.line_no = 10, .product = "P1"};
-	Models_InvoiceLine iline2 = {.line_no = 20, .product = "P2"};
+	Model_Invoice inv = {.lines = NULL};
+	Model_InvoiceLine iline1 = {.line_no = 10, .product = "P1"};
+	Model_InvoiceLine iline2 = {.line_no = 20, .product = "P2"};
 
 	// EXPECT
 	g_assert_null(inv.lines);
 
 	// WHEN
-	Models_Invoice_addLine(&inv, &iline1);
+	Model_Invoice_addLine(&inv, &iline1);
 
 	// THEN
 	g_assert_nonnull(inv.lines);
@@ -39,7 +39,7 @@ test_Invoice_addLine()
 	g_assert_nonnull(g_list_find(inv.lines, &iline1));
 
 	// WHEN
-	Models_Invoice_addLine(&inv, &iline2);
+	Model_Invoice_addLine(&inv, &iline2);
 
 	// THEN
 	g_assert_cmpint(2, ==, g_list_length(inv.lines));
@@ -51,13 +51,13 @@ void
 test_InvoiceLine_compareByLineNo()
 {
 	// GIVEN
-	Models_InvoiceLine iline1 = {.line_no = 10};
-	Models_InvoiceLine iline2 = {.line_no = 20};
+	Model_InvoiceLine iline1 = {.line_no = 10};
+	Model_InvoiceLine iline2 = {.line_no = 20};
 
 	// EXPECT
-	g_assert_cmpint(0, ==, Models_InvoiceLine_compareByLineNo(&iline1, &iline1));
-	g_assert_cmpint(0, >, Models_InvoiceLine_compareByLineNo(&iline1, &iline2));
-	g_assert_cmpint(0, <, Models_InvoiceLine_compareByLineNo(&iline2, &iline1));
+	g_assert_cmpint(0, ==, Model_InvoiceLine_compareByLineNo(&iline1, &iline1));
+	g_assert_cmpint(0, >, Model_InvoiceLine_compareByLineNo(&iline1, &iline2));
+	g_assert_cmpint(0, <, Model_InvoiceLine_compareByLineNo(&iline2, &iline1));
 }
 
 int
