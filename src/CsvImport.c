@@ -19,36 +19,37 @@
 #include <glib.h>
 #include "CsvImport.h"
 #include "Database.h"
-#include "Model.h"
+#include "model/model.h"
 
-Model_Invoice*
+
+Stk_Model_Invoice*
 invoice_from_csv(gchar **fields);
 
-Model_InvoiceLine*
+Stk_Model_InvoiceLine*
 invoice_line_from_csv(gchar **fields);
 
-Model_Invoice*
+Stk_Model_Invoice*
 invoice_from_csv(gchar **fields)
 {
-	Model_Invoice *inv = g_malloc(sizeof(Model_Invoice));
-	inv->doc_no = fields[0];
-	inv->customer = fields[1];
-	inv->date = fields[2];
-	inv->total = g_ascii_strtod(fields[3], NULL);
-	inv->discount = g_ascii_strtod(fields[4], NULL);
-	inv->lines = NULL;
+	Stk_Model_Invoice *inv = stk_model_invoice_new();
+	stk_model_invoice_set_doc_no(inv, fields[0]);
+	stk_model_invoice_set_customer(inv, fields[1]);
+	stk_model_invoice_set_date(inv, fields[2]);
+	stk_model_invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
+	stk_model_invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
+	stk_model_invoice_set_discount(inv, g_ascii_strtod(fields[4], NULL));
 	return inv;
 }
 
-Model_InvoiceLine*
+Stk_Model_InvoiceLine*
 invoice_line_from_csv(gchar **fields)
 {
-	Model_InvoiceLine *iline = g_malloc(sizeof(Model_InvoiceLine));
-	iline->line_no = g_ascii_strtoull(fields[5], NULL, 10);
-	iline->product = fields[6];
-	iline->qty = g_ascii_strtoull(fields[7], NULL, 10);
-	iline->price = g_ascii_strtod(fields[8], NULL);
-	iline->line_amt = g_ascii_strtod(fields[9], NULL);
+	Stk_Model_InvoiceLine *iline = stk_model_invoiceline_new();
+	stk_model_invoiceline_set_line_no(iline, g_ascii_strtoull(fields[5], NULL, 10));
+	stk_model_invoiceline_set_product(iline, fields[6]);
+	stk_model_invoiceline_set_qty(iline, g_ascii_strtoull(fields[7], NULL, 10));
+	stk_model_invoiceline_set_price(iline, g_ascii_strtod(fields[8], NULL));
+	stk_model_invoiceline_set_line_amt(iline, g_ascii_strtod(fields[9], NULL));
 	return iline;
 }
 
@@ -57,10 +58,10 @@ CsvImport_processLine(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
 	gchar *doc_no = fields[0];
-	Model_Invoice *inv = Database_Invoice_get(doc_no);
+	Stk_Model_Invoice *inv = Database_Invoice_get(doc_no);
 	if (!inv)
 		inv = invoice_from_csv(fields);
-	Model_InvoiceLine *iline = invoice_line_from_csv(fields);
-	Model_Invoice_addLine(inv, iline);
+	Stk_Model_InvoiceLine *iline = invoice_line_from_csv(fields);
+	stk_model_invoice_add_line(inv, iline);
 	Database_Invoice_save(inv);
 }

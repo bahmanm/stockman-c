@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
-#include <glib.h>
 #include "Database.h"
+#include "model/invoice.h"
 
 typedef struct Database {
 	GHashTable * invoices;
@@ -46,12 +46,15 @@ Database_init()
 }
 
 gboolean
-Database_Invoice_save(Model_Invoice *inv)
+Database_Invoice_save(Stk_Model_Invoice *inv)
 {
-	return g_hash_table_insert(Database_get()->invoices, inv->doc_no, inv);
+	g_object_ref(inv);
+	return g_hash_table_insert(Database_get()->invoices,
+	                           stk_model_invoice_get_doc_no(inv)->str,
+	                           inv);
 }
 
-Model_Invoice*
+Stk_Model_Invoice*
 Database_Invoice_get(gchar *doc_no)
 {
 	return g_hash_table_lookup(Database_get()->invoices, doc_no);
@@ -60,25 +63,26 @@ Database_Invoice_get(gchar *doc_no)
 void
 invoices_foreach(gpointer doc_no, gpointer invp, gpointer thunkp)
 {
-	Model_Invoice *inv = (Model_Invoice *)invp;
-	void (*thunk)(Model_Invoice *) = thunkp;
+	Stk_Model_Invoice *inv = invp;
+	void (*thunk)(Stk_Model_Invoice *) = thunkp;
 	thunk(inv);
 }
 
 void
-Database_Invoice_foreach(void (*thunk)(Model_Invoice *))
+Database_Invoice_foreach(void (*thunk)(Stk_Model_Invoice *))
 {
 	g_hash_table_foreach(db->invoices, invoices_foreach, thunk);
 }
 
 void
-Database_Invoice_clear(void (*invoice_destroy_thunk)(Model_Invoice *))
+Database_Invoice_clear(void (*invoice_destroy_thunk)(Stk_Model_Invoice *))
 {
 	g_autoptr(GList) keys = g_hash_table_get_keys(db->invoices);
 	for (GList *key = keys; key; key = key->next) {
-		Model_Invoice *inv = g_hash_table_lookup(db->invoices, key);
+		Stk_Model_Invoice *inv = g_hash_table_lookup(db->invoices, key);
+		g_hash_table_remove(db->invoices, key->data);
+		g_object_unref(inv);
 		if (invoice_destroy_thunk)
 			invoice_destroy_thunk(inv);
-		g_hash_table_remove(db->invoices, key->data);
 	}
 }

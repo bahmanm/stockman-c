@@ -18,8 +18,8 @@
  */
 #pragma once
 
-#include <glib.h>
-#include "Model.h"
+#include "model/invoice.h"
+#include "model/model.h"
 
 typedef struct Database Database;
 
@@ -44,7 +44,7 @@ Database_get();
  * @param doc_no Invoice number
  * @return Invoice if exists, `NULL` otherwise.
  */
-Model_Invoice*
+Stk_Model_Invoice*
 Database_Invoice_get(gchar *doc_no);
 
 /**
@@ -57,7 +57,7 @@ Database_Invoice_get(gchar *doc_no);
  * @return `TRUE` if successful, `FALSE` otherwise.
  */
 gboolean
-Database_Invoice_save(Model_Invoice *inv);
+Database_Invoice_save(Stk_Model_Invoice *inv);
 
 /**
  * Iterate over all invoices and execute a given thunk for each.
@@ -65,7 +65,7 @@ Database_Invoice_save(Model_Invoice *inv);
  * @param thunk Function to execute for each invoice.
  */
 void
-Database_Invoice_foreach(void (*thunk)(Model_Invoice*));
+Database_Invoice_foreach(void (*thunk)(Stk_Model_Invoice *));
 
 /**
  * Remove all invoices from the database.
@@ -74,4 +74,4 @@ Database_Invoice_foreach(void (*thunk)(Model_Invoice*));
  *        mainly to free up the memory.
  */
 void
-Database_Invoice_clear(void (*invoice_destroy_thunk)(Model_Invoice *));
+Database_Invoice_clear(void (*invoice_destroy_thunk)(Stk_Model_Invoice *));

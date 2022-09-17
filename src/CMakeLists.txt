@@ -1,12 +1,15 @@
 set(
   src_HEADERS
-  Model.h
+  model/model.h
+  model/invoice.h
+  model/invoiceline.h
   Database.h
   CsvImport.h)
 
 set(
   src_SOURCES
-  Model.c
+  model/invoice.c
+  model/invoiceline.c
   Database.c
   CsvImport.c)
 

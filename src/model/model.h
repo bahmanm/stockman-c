@@ -17,27 +17,6 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #pragma once
-#include <glib.h>
-#include "model/model.h"
 
-/**
- * Load a line from the invoices CSV file.
- * The line is converted to an invoice line and saved in the database along
- * with the corresponding invoice.
- *
- * The CSV file is assumed to have the following columns in order:
- * - docNo
- * - customer
- * - date
- * - total
- * - discount
- * - lineNo
- * - product
- * - qty
- * - price
- * - lineAmt
- *
- * @param line The line from CSV file
- */
-void
-CsvImport_processLine(gchar *line);
+#include "invoice.h"
+#include "invoiceline.h"
