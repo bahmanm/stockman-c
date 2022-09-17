@@ -18,7 +18,7 @@
  */
 #include <glib.h>
 #include "Database.h"
-#include "Model.h"
+#include "model/invoice.h"
 
 void
 database_setup()
@@ -36,23 +36,24 @@ void
 test_Database_Invoice_get_and_save()
 {
 	/* GIVEN */
-	Model_Invoice inv = {.doc_no = "I1", .lines = NULL};
+	g_autoptr(Stk_Model_Invoice) inv = stk_model_invoice_new();
+	stk_model_invoice_set_doc_no(inv, "I1");
 
 	/* WHEN */
-	Database_Invoice_save(&inv);
+	Database_Invoice_save(inv);
 
 	/* THEN */
-	Model_Invoice *actual = Database_Invoice_get("I1");
-	g_assert_cmpstr("I1", ==, actual->doc_no);
+	g_autoptr(Stk_Model_Invoice) actual = Database_Invoice_get("I1");
+	g_assert_cmpstr("I1", ==, stk_model_invoice_get_doc_no(actual)->str);
 }
 
 guint invoices_foreach_thunk_counter  = 0;
-gchar *invoices_foreach_thunk_doc_nos[2] = {NULL, NULL};
+GString *invoices_foreach_thunk_doc_nos[2] = {NULL, NULL};
 
 void
-invoices_foreach_thunk(Model_Invoice * inv)
+invoices_foreach_thunk(Stk_Model_Invoice *inv)
 {
-	invoices_foreach_thunk_doc_nos[invoices_foreach_thunk_counter] = inv->doc_no;
+	invoices_foreach_thunk_doc_nos[invoices_foreach_thunk_counter] = stk_model_invoice_get_doc_no(inv);
 	invoices_foreach_thunk_counter += 1;
 }
 
@@ -60,10 +61,12 @@ void
 test_Database_Invoice_foreach()
 {
 	/* GIVEN */
-	Model_Invoice inv1 = {.doc_no = "I1", .lines = NULL};
-	Database_Invoice_save(&inv1);
-	Model_Invoice inv2 = {.doc_no = "I2", .lines = NULL};
-	Database_Invoice_save(&inv2);
+	g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
+	stk_model_invoice_set_doc_no(inv1, "I1");
+	Database_Invoice_save(inv1);
+	g_autoptr(Stk_Model_Invoice) inv2 = stk_model_invoice_new();
+	stk_model_invoice_set_doc_no(inv2, "I2");
+	Database_Invoice_save(inv2);
 
 	/* WHEN */
 	Database_Invoice_foreach(invoices_foreach_thunk);
@@ -71,17 +74,20 @@ test_Database_Invoice_foreach()
 	/* THEN */
 	g_assert_cmpint(2, ==, invoices_foreach_thunk_counter);
 	// foreach doesn't guarantee order
-	g_assert_true((invoices_foreach_thunk_doc_nos[0] == inv1.doc_no && invoices_foreach_thunk_doc_nos[1] == inv2.doc_no)
+	g_assert_true((invoices_foreach_thunk_doc_nos[0] == stk_model_invoice_get_doc_no(inv1)
+	               && invoices_foreach_thunk_doc_nos[1] == stk_model_invoice_get_doc_no(inv2))
 	              ||
-	              (invoices_foreach_thunk_doc_nos[0] == inv2.doc_no && invoices_foreach_thunk_doc_nos[1] == inv1.doc_no));
+	              (invoices_foreach_thunk_doc_nos[0] == stk_model_invoice_get_doc_no(inv2)
+	               && invoices_foreach_thunk_doc_nos[1] == stk_model_invoice_get_doc_no(inv1)));
 }
 
 void
 test_Database_Invoice_clear()
 {
 	/* GIVEN */
-	Model_Invoice inv1 = {.doc_no = "I1", .lines = NULL};
-	Database_Invoice_save(&inv1);
+	g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
+	stk_model_invoice_set_doc_no(inv1, "I1");
+	Database_Invoice_save(inv1);
 
 	/* WHEN */
 	Database_Invoice_clear(NULL);
