@@ -18,7 +18,6 @@
  */
 #include <glib.h>
 #include "Database.h"
-#include "model/invoice.h"
 
 void
 database_setup()

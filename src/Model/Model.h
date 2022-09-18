@@ -18,5 +18,5 @@
  */
 #pragma once
 
-#include "invoice.h"
-#include "invoiceline.h"
+#include "Invoice.h"
+#include "InvoiceLine.h"

@@ -17,9 +17,7 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include <glib.h>
-#include "model/invoice.h"
-#include "model/invoiceline.h"
-#include "model/model.h"
+#include "Model/Model.h"
 
 void
 test_stk_model_invoice_add_line()

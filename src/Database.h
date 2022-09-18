@@ -18,8 +18,7 @@
  */
 #pragma once
 
-#include "model/invoice.h"
-#include "model/model.h"
+#include "Model/Model.h"
 
 typedef struct Database Database;
 

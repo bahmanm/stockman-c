@@ -17,7 +17,7 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #pragma once
-#include "model/model.h"
+#include "Model/Model.h"
 
 /**
  * Load a line from the invoices CSV file.

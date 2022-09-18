@@ -18,8 +18,6 @@
  */
 #include "Database.h"
 #include "CsvImport.h"
-#include "model/invoice.h"
-#include "model/invoiceline.h"
 
 void
 database_setup()

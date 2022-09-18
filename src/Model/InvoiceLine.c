@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
-#include "invoiceline.h"
+#include "InvoiceLine.h"
 
 struct _Stk_Model_InvoiceLine {
 	GObject parent;

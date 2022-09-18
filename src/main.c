@@ -19,9 +19,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
-#include "model/invoice.h"
-#include "model/invoiceline.h"
-#include "model/model.h"
+#include "Model/Model.h"
 #include "Database.h"
 #include "CsvImport.h"
 

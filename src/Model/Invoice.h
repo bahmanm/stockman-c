@@ -19,7 +19,7 @@
 #pragma once
 
 #include <glib-object.h>
-#include "invoiceline.h"
+#include "InvoiceLine.h"
 
 #define STK_MODEL_TYPE_INVOICE (stk_model_invoice_get_type())
 G_DECLARE_FINAL_TYPE(Stk_Model_Invoice, stk_model_invoice, STK_MODEL, INVOICE,

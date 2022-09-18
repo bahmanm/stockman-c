@@ -17,7 +17,6 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #include "Database.h"
-#include "model/invoice.h"
 
 typedef struct Database {
 	GHashTable * invoices;
