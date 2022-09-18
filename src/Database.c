@@ -48,6 +48,8 @@ Database_init()
 gboolean
 Database_Invoice_save(Stk_Model_Invoice *inv)
 {
+	if (!inv)
+		return FALSE;
 	g_object_ref(inv);
 	return g_hash_table_insert(Database_get()->invoices,
 	                           stk_model_invoice_get_doc_no(inv)->str,
@@ -57,7 +59,10 @@ Database_Invoice_save(Stk_Model_Invoice *inv)
 Stk_Model_Invoice*
 Database_Invoice_get(gchar *doc_no)
 {
-	return g_hash_table_lookup(Database_get()->invoices, doc_no);
+	Stk_Model_Invoice *inv = g_hash_table_lookup(Database_get()->invoices, doc_no);
+	if (inv)
+		g_object_ref(inv);
+	return inv;
 }
 
 void
@@ -79,7 +84,7 @@ Database_Invoice_clear(void (*invoice_destroy_thunk)(Stk_Model_Invoice *))
 {
 	g_autoptr(GList) keys = g_hash_table_get_keys(db->invoices);
 	for (GList *key = keys; key; key = key->next) {
-		Stk_Model_Invoice *inv = g_hash_table_lookup(db->invoices, key);
+		Stk_Model_Invoice *inv = g_hash_table_lookup(db->invoices, key->data);
 		g_hash_table_remove(db->invoices, key->data);
 		g_object_unref(inv);
 		if (invoice_destroy_thunk)
