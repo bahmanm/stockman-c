@@ -17,7 +17,6 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #pragma once
-#include <glib.h>
 #include "model/model.h"
 
 /**
@@ -40,4 +39,4 @@
  * @param line The line from CSV file
  */
 void
-CsvImport_processLine(gchar *line);
+CsvImport_processline(gchar *line);

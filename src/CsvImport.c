@@ -19,7 +19,6 @@
 #include <glib.h>
 #include "CsvImport.h"
 #include "Database.h"
-#include "model/model.h"
 
 
 Stk_Model_Invoice*
@@ -38,6 +37,7 @@ invoice_from_csv(gchar **fields)
 	stk_model_invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
 	stk_model_invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
 	stk_model_invoice_set_discount(inv, g_ascii_strtod(fields[4], NULL));
+	g_object_ref(inv);
 	return inv;
 }
 
@@ -50,18 +50,19 @@ invoice_line_from_csv(gchar **fields)
 	stk_model_invoiceline_set_qty(iline, g_ascii_strtoull(fields[7], NULL, 10));
 	stk_model_invoiceline_set_price(iline, g_ascii_strtod(fields[8], NULL));
 	stk_model_invoiceline_set_line_amt(iline, g_ascii_strtod(fields[9], NULL));
+	g_object_ref(iline);
 	return iline;
 }
 
 void
-CsvImport_processLine(gchar *line)
+CsvImport_processline(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
 	gchar *doc_no = fields[0];
-	Stk_Model_Invoice *inv = Database_Invoice_get(doc_no);
+	g_autoptr(Stk_Model_Invoice) inv = Database_Invoice_get(doc_no);
 	if (!inv)
 		inv = invoice_from_csv(fields);
-	Stk_Model_InvoiceLine *iline = invoice_line_from_csv(fields);
+	g_autoptr(Stk_Model_InvoiceLine) iline = invoice_line_from_csv(fields);
 	stk_model_invoice_add_line(inv, iline);
 	Database_Invoice_save(inv);
 }

@@ -89,7 +89,7 @@ main(int argc, char **argv)
 	if (!(lines = file_get_lines(argv[1], &error)))
 		g_error("ERROR: %s\n", error->message);
 	for (int line=0; lines[line]; line++)
-		CsvImport_processLine(lines[line]);
+		CsvImport_processline(lines[line]);
 	Database_Invoice_foreach(invoice_pretty_print);
 	return 0;
 }
