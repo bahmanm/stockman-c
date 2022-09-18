@@ -32,6 +32,7 @@ struct _Stk_Model_Invoice {
 G_DEFINE_TYPE(Stk_Model_Invoice, stk_model_invoice, G_TYPE_OBJECT)
 
 static void stk_model_invoice_init(Stk_Model_Invoice *self) {}
+
 static void
 stk_model_invoice_class_init(Stk_Model_InvoiceClass *klass) {}
 
@@ -124,6 +125,8 @@ stk_model_invoice_set_lines(Stk_Model_Invoice *self, GList *lines)
 void
 stk_model_invoice_add_line(Stk_Model_Invoice *self, Stk_Model_InvoiceLine *line)
 {
-	if (line)
+	if (line) {
+		g_object_ref(line);
 		self->lines = g_list_prepend(self->lines, line);
+	}
 }
