@@ -22,77 +22,86 @@
 void
 database_setup()
 {
-	Database_init();
+	//Stk_Database_init();
 }
 
 void
 database_teardown()
 {
-	Database_Invoice_clear(NULL);
+	Stk_Database_Invoice_clear(NULL);
 }
 
 void
-test_Database_Invoice_get_and_save()
+test_Stk_Database_Invoice_get_and_save()
 {
-	/* GIVEN */
-	g_autoptr(Stk_Model_Invoice) inv = stk_model_invoice_new();
-	stk_model_invoice_set_doc_no(inv, "I1");
+	{
+		/* GIVEN */
+		g_autoptr(Stk_Model_Invoice) inv = stk_model_invoice_new();
+		stk_model_invoice_set_doc_no(inv, "I1");
 
-	/* WHEN */
-	Database_Invoice_save(inv);
+		/* WHEN */
+		Stk_Database_Invoice_save(inv);
+	}
 
 	/* THEN */
-	g_autoptr(Stk_Model_Invoice) actual = Database_Invoice_get("I1");
-	g_assert_cmpstr("I1", ==, stk_model_invoice_get_doc_no(actual)->str);
+	Stk_Model_Invoice* actual = Stk_Database_Invoice_get("I1");
+	g_assert_nonnull(actual);
+	g_assert_cmpstr("I1", ==, (stk_model_invoice_get_doc_no(actual))->str);
 }
 
-guint invoices_foreach_thunk_counter  = 0;
-GString *invoices_foreach_thunk_doc_nos[2] = {NULL, NULL};
+guint invoices_foreach_func_counter  = 0;
+GString *invoices_foreach_func_doc_nos[2] = {NULL, NULL};
 
 void
-invoices_foreach_thunk(Stk_Model_Invoice *inv)
+invoices_foreach_func(Stk_Model_Invoice *inv)
 {
-	invoices_foreach_thunk_doc_nos[invoices_foreach_thunk_counter] = stk_model_invoice_get_doc_no(inv);
-	invoices_foreach_thunk_counter += 1;
+	invoices_foreach_func_doc_nos[invoices_foreach_func_counter] = stk_model_invoice_get_doc_no(inv);
+	invoices_foreach_func_counter += 1;
 }
 
 void
-test_Database_Invoice_foreach()
+test_Stk_Database_Invoice_foreach()
 {
 	/* GIVEN */
-	g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
-	stk_model_invoice_set_doc_no(inv1, "I1");
-	Database_Invoice_save(inv1);
-	g_autoptr(Stk_Model_Invoice) inv2 = stk_model_invoice_new();
-	stk_model_invoice_set_doc_no(inv2, "I2");
-	Database_Invoice_save(inv2);
+	gchar *inv1_doc_no = "I1";
+	gchar *inv2_doc_no = "I2";
+	{
+		g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
+		stk_model_invoice_set_doc_no(inv1, "I1");
+		Stk_Database_Invoice_save(inv1);
+		g_autoptr(Stk_Model_Invoice) inv2 = stk_model_invoice_new();
+		stk_model_invoice_set_doc_no(inv2, "I2");
+		Stk_Database_Invoice_save(inv2);
+	}
 
 	/* WHEN */
-	Database_Invoice_foreach(invoices_foreach_thunk);
+	Stk_Database_Invoice_foreach(invoices_foreach_func);
 
 	/* THEN */
-	g_assert_cmpint(2, ==, invoices_foreach_thunk_counter);
+	g_assert_cmpint(2, ==, invoices_foreach_func_counter);
 	// foreach doesn't guarantee order
-	g_assert_true((invoices_foreach_thunk_doc_nos[0] == stk_model_invoice_get_doc_no(inv1)
-	               && invoices_foreach_thunk_doc_nos[1] == stk_model_invoice_get_doc_no(inv2))
+	g_assert_true((g_strcmp0(invoices_foreach_func_doc_nos[0]->str, inv1_doc_no) == 0
+	               && g_strcmp0(invoices_foreach_func_doc_nos[1]->str, inv2_doc_no) == 0)
 	              ||
-	              (invoices_foreach_thunk_doc_nos[0] == stk_model_invoice_get_doc_no(inv2)
-	               && invoices_foreach_thunk_doc_nos[1] == stk_model_invoice_get_doc_no(inv1)));
+	              (g_strcmp0(invoices_foreach_func_doc_nos[0]->str, inv2_doc_no) == 0
+	               && g_strcmp0(invoices_foreach_func_doc_nos[1]->str, inv1_doc_no) == 0));
 }
 
 void
-test_Database_Invoice_clear()
+test_Stk_Database_Invoice_clear()
 {
-	/* GIVEN */
-	g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
-	stk_model_invoice_set_doc_no(inv1, "I1");
-	Database_Invoice_save(inv1);
+	{
+		/* GIVEN */
+		g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
+		stk_model_invoice_set_doc_no(inv1, "I1");
+		Stk_Database_Invoice_save(inv1);
+	}
 
 	/* WHEN */
-	Database_Invoice_clear(NULL);
+	Stk_Database_Invoice_clear(NULL);
 
 	/* THEN */
-	g_assert_null(Database_Invoice_get("I1"));
+	g_assert_null(Stk_Database_Invoice_get("I1"));
 }
 
 int
@@ -101,12 +110,12 @@ main(int argc, char **argv)
 	g_test_init(&argc, &argv, NULL);
 	g_test_add("/Database/Invoice/get_and_save",
 	           gpointer, NULL,
-	           database_setup, test_Database_Invoice_get_and_save, database_teardown);
+	           database_setup, test_Stk_Database_Invoice_get_and_save, database_teardown);
 	g_test_add("/Database/Invoice/foreach",
 	           gpointer, NULL,
-	           database_setup, test_Database_Invoice_foreach, database_teardown);
+	           database_setup, test_Stk_Database_Invoice_foreach, database_teardown);
 	g_test_add("/Database/Invoice/clear",
 	           gpointer, NULL,
-	           database_setup, test_Database_Invoice_clear, database_teardown);
+	           database_setup, test_Stk_Database_Invoice_clear, database_teardown);
 	return g_test_run();
 }
