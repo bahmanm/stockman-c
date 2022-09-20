@@ -31,17 +31,38 @@ struct _Stk_Model_Invoice {
 
 G_DEFINE_TYPE(Stk_Model_Invoice, stk_model_invoice, G_TYPE_OBJECT)
 
-static void stk_model_invoice_init(Stk_Model_Invoice *self) {}
+static void stk_model_invoice_init(Stk_Model_Invoice *self)
+{
+	self->doc_no = NULL;
+	self->customer = NULL;
+	self->date = NULL;
+	self->lines = NULL;
+}
 
 static void
-stk_model_invoice_class_init(Stk_Model_InvoiceClass *klass) {}
+Stk_Model_Invoice_finalise(GObject *object)
+{
+	Stk_Model_Invoice *self = STK_MODEL_INVOICE(object);
+	if (self->customer)
+		g_string_free(self->customer, TRUE);
+	if (self->date)
+		g_string_free(self->date, TRUE);
+	if (self->doc_no)
+		g_string_free(self->doc_no, TRUE);
+	G_OBJECT_CLASS(stk_model_invoice_parent_class)->finalize(object);
+}
+
+
+static void
+stk_model_invoice_class_init(Stk_Model_InvoiceClass *klass)
+{
+	G_OBJECT_CLASS(klass)->finalize = Stk_Model_Invoice_finalise;
+}
 
 Stk_Model_Invoice *
 stk_model_invoice_new()
 {
-	Stk_Model_Invoice * inv = g_object_new(STK_MODEL_TYPE_INVOICE, NULL);
-	inv->lines = NULL;
-	return inv;
+	return g_object_new(STK_MODEL_TYPE_INVOICE, NULL);
 }
 
 GString *
@@ -54,7 +75,7 @@ void
 stk_model_invoice_set_doc_no(Stk_Model_Invoice *self, gchar *doc_no)
 {
 	if (self->doc_no)
-		g_object_unref(self->doc_no);
+		g_string_free(self->doc_no, TRUE);
 	self->doc_no = g_string_new(doc_no);
 }
 
@@ -68,7 +89,7 @@ void
 stk_model_invoice_set_customer(Stk_Model_Invoice *self, gchar *customer)
 {
 	if (self->customer)
-		g_object_unref(self->customer);
+		g_string_free(self->customer, TRUE);
 	self->customer = g_string_new(customer);
 }
 
@@ -82,7 +103,7 @@ void
 stk_model_invoice_set_date(Stk_Model_Invoice *self, gchar *date)
 {
 	if (self->date)
-		g_object_unref(self->date);
+		g_string_free(self->date, TRUE);
 	self->date = g_string_new(date);
 }
 
