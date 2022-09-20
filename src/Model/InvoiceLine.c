@@ -33,7 +33,19 @@ G_DEFINE_FINAL_TYPE(Stk_Model_InvoiceLine, stk_model_invoiceline, G_TYPE_OBJECT)
 static void stk_model_invoiceline_init(Stk_Model_InvoiceLine *self) {}
 
 static void
-stk_model_invoiceline_class_init(Stk_Model_InvoiceLineClass *klass) {}
+Stk_Model_InvoiceLine_finalise(GObject *object)
+{
+	Stk_Model_InvoiceLine *self = STK_MODEL_INVOICELINE(object);
+	if (self->product)
+		g_string_free(self->product, TRUE);
+	G_OBJECT_CLASS(stk_model_invoiceline_parent_class)->finalize(object);
+}
+
+static void
+stk_model_invoiceline_class_init(Stk_Model_InvoiceLineClass *klass)
+{
+	G_OBJECT_CLASS(klass)->finalize = Stk_Model_InvoiceLine_finalise;
+}
 
 Stk_Model_InvoiceLine *
 stk_model_invoiceline_new(void)
@@ -65,7 +77,7 @@ stk_model_invoiceline_set_product(Stk_Model_InvoiceLine *self,
                                   gchar *product)
 {
 	if (self->product)
-		g_object_unref(self->product);
+		g_string_free(self->product, TRUE);
 	self->product = g_string_new(product);
 }
 
