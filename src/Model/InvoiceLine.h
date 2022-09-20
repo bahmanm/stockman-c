@@ -21,8 +21,8 @@
 
 #define STK_MODEL_TYPE_INVOICELINE (stk_model_invoiceline_get_type())
 
-G_DECLARE_FINAL_TYPE(Stk_Model_InvoiceLine, std_model_invoiceline, STK_MODEL,
-                     INVOICELINE, GObject)
+G_DECLARE_FINAL_TYPE(Stk_Model_InvoiceLine, stk_model_invoiceline, STK_MODEL,
+                     INVOICELINE, GObject);
 
 Stk_Model_InvoiceLine *
 stk_model_invoiceline_new(void);

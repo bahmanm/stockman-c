@@ -35,7 +35,7 @@ test_stk_model_invoice_add_line()
 	stk_model_invoice_add_line(inv, iline1);
 
 	/* THEN */
-	g_autoptr(GList) lines1 = stk_model_invoice_get_lines(inv);
+	GList *lines1 = stk_model_invoice_get_lines(inv);
 	g_assert_nonnull(lines1);
 	g_assert_cmpint(1, ==, g_list_length(lines1));
 	g_assert_nonnull(g_list_find(lines1, iline1));
@@ -47,7 +47,7 @@ test_stk_model_invoice_add_line()
 	stk_model_invoice_add_line(inv, iline2);
 
 	/* THEN */
-	g_autoptr(GList) lines2 = stk_model_invoice_get_lines(inv);
+	GList *lines2 = stk_model_invoice_get_lines(inv);
 	g_assert_cmpint(2, ==, g_list_length(lines2));
 	g_assert_nonnull(g_list_find(lines2, iline1));
 	g_assert_nonnull(g_list_find(lines2, iline2));

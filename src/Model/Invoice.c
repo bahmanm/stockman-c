@@ -44,11 +44,13 @@ Stk_Model_Invoice_finalise(GObject *object)
 {
 	Stk_Model_Invoice *self = STK_MODEL_INVOICE(object);
 	if (self->customer)
-		g_string_free(self->customer, TRUE);
+		g_string_free(g_steal_pointer(&self->customer), TRUE);
 	if (self->date)
-		g_string_free(self->date, TRUE);
+		g_string_free(g_steal_pointer(&self->date), TRUE);
 	if (self->doc_no)
-		g_string_free(self->doc_no, TRUE);
+		g_string_free(g_steal_pointer(&self->doc_no), TRUE);
+	if (self->lines)
+		g_list_free_full(g_steal_pointer(&self->lines), g_object_unref);
 	G_OBJECT_CLASS(stk_model_invoice_parent_class)->finalize(object);
 }
 
@@ -68,6 +70,8 @@ stk_model_invoice_new()
 GString *
 stk_model_invoice_get_doc_no(Stk_Model_Invoice *self)
 {
+	/* TODO free the existing value */
+
 	return self->doc_no;
 }
 
@@ -75,7 +79,7 @@ void
 stk_model_invoice_set_doc_no(Stk_Model_Invoice *self, gchar *doc_no)
 {
 	if (self->doc_no)
-		g_string_free(self->doc_no, TRUE);
+		g_string_free(g_steal_pointer(&self->doc_no), TRUE);
 	self->doc_no = g_string_new(doc_no);
 }
 
@@ -89,7 +93,7 @@ void
 stk_model_invoice_set_customer(Stk_Model_Invoice *self, gchar *customer)
 {
 	if (self->customer)
-		g_string_free(self->customer, TRUE);
+		g_string_free(g_steal_pointer(&self->customer), TRUE);
 	self->customer = g_string_new(customer);
 }
 
@@ -103,7 +107,7 @@ void
 stk_model_invoice_set_date(Stk_Model_Invoice *self, gchar *date)
 {
 	if (self->date)
-		g_string_free(self->date, TRUE);
+		g_string_free(g_steal_pointer(&self->date), TRUE);
 	self->date = g_string_new(date);
 }
 
@@ -140,6 +144,8 @@ stk_model_invoice_get_lines(Stk_Model_Invoice *self)
 void
 stk_model_invoice_set_lines(Stk_Model_Invoice *self, GList *lines)
 {
+	if (self->lines)
+		g_list_free_full(g_steal_pointer(&self->lines), g_object_unref);
 	self->lines = lines;
 }
 
