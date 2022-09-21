@@ -17,8 +17,7 @@
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
 #pragma once
-#include <glib.h>
-#include "Model.h"
+#include "Model/Model.h"
 
 /**
  * Load a line from the invoices CSV file.
@@ -40,4 +39,4 @@
  * @param line The line from CSV file
  */
 void
-CsvImport_processLine(gchar *line);
+CsvImport_processline(gchar *line);

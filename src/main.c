@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include <string.h>
-#include "Model.h"
+#include "Model/Model.h"
 #include "Database.h"
 #include "CsvImport.h"
 
@@ -27,7 +27,7 @@ gchar**
 file_get_lines(char *filepath, GError **error);
 
 void
-invoice_pretty_print(Model_Invoice *inv);
+invoice_pretty_print(Stk_Model_Invoice *inv);
 
 gchar**
 file_get_lines(char *filepath, GError **error)
@@ -41,9 +41,11 @@ file_get_lines(char *filepath, GError **error)
 }
 
 void
-invoice_pretty_print(Model_Invoice *inv)
+invoice_pretty_print(Stk_Model_Invoice *inv)
 {
-	inv->lines = g_list_sort(inv->lines, Model_InvoiceLine_compareByLineNo);
+	Stk_Model_Invoice_set_lines(inv,
+	                            g_list_sort(Stk_Model_Invoice_get_lines(inv),
+	                                        Stk_Model_InvoiceLine_compare_by_line_no));
 	g_print("\n"
 	        "+------------------------------------------------------------------------------+\n"
 	        "| INVOICE#: %-35s  DATE:       %-10s        |\n"
@@ -51,18 +53,23 @@ invoice_pretty_print(Model_Invoice *inv)
 	        "+------------------------------------------------------------------------------+\n"
 	        "| #   | PRODUCT                     | QTY      | PRICE      | AMOUNT           |\n"
 	        "+------------------------------------------------------------------------------+\n",
-	        inv->doc_no, inv->date,
-	        inv->customer, inv->discount);
-	for (GList *iline = inv->lines; iline; iline = iline->next) {
-		Model_InvoiceLine *data = iline->data;
+	        Stk_Model_Invoice_get_doc_no(inv)->str,
+	        Stk_Model_Invoice_get_date(inv)->str,
+	        Stk_Model_Invoice_get_customer(inv)->str,
+	        Stk_Model_Invoice_get_discount(inv));
+	for (GList *iline = Stk_Model_Invoice_get_lines(inv); iline; iline = iline->next) {
+		Stk_Model_InvoiceLine *data = iline->data;
 		g_print("| %3d   %-26s     %8d   %10.2f   %15.2f |\n",
-		        data->line_no, data->product,
-		        data->qty, data->price, data->line_amt);
+		        Stk_Model_InvoiceLine_get_line_no(data),
+		        Stk_Model_InvoiceLine_get_product(data)->str,
+		        Stk_Model_InvoiceLine_get_qty(data),
+		        Stk_Model_InvoiceLine_get_price(data),
+		        Stk_Model_InvoiceLine_get_line_amt(data));
 	}
 	g_print("+------------------------------------------------------------------------------+\n"
 	        "|                                                     TOTAL: %17.2f |\n"
 	        "+------------------------------------------------------------------------------+\n",
-	        inv->total);
+	        Stk_Model_Invoice_get_total(inv));
 }
 
 int
@@ -73,14 +80,13 @@ main(int argc, char **argv)
 		return 0;
 	}
 	g_log_set_writer_func(g_log_writer_standard_streams, NULL, NULL);
-	Database_init();
 
 	g_autoptr(GError) error = NULL;
 	gchar **lines;
 	if (!(lines = file_get_lines(argv[1], &error)))
 		g_error("ERROR: %s\n", error->message);
 	for (int line=0; lines[line]; line++)
-		CsvImport_processLine(lines[line]);
-	Database_Invoice_foreach(invoice_pretty_print);
+		CsvImport_processline(lines[line]);
+	Stk_Database_Invoice_foreach(invoice_pretty_print);
 	return 0;
 }

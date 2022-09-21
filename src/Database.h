@@ -18,25 +18,18 @@
  */
 #pragma once
 
-#include <glib.h>
-#include "Model.h"
+#include <glib-object.h>
+#include "Model/Model.h"
 
-typedef struct Database Database;
-
-static Database* db;
-
-/**
- * Initialise the database.
- */
-void
-Database_init();
+#define STK_TYPE_DATABASE (Stk_Database_get_type())
+G_DECLARE_FINAL_TYPE(Stk_Database, Stk_Database, STK, DATABASE, GObject)
 
 /**
  * Returns the initialised database instance.
  * Attempt to `get` an uninitialised database causes the program to abort.
  */
-const Database*
-Database_get();
+Stk_Database *
+Stk_Database_get();
 
 /**
  * Find an invoice.
@@ -44,8 +37,8 @@ Database_get();
  * @param doc_no Invoice number
  * @return Invoice if exists, `NULL` otherwise.
  */
-Model_Invoice*
-Database_Invoice_get(gchar *doc_no);
+Stk_Model_Invoice *
+Stk_Database_Invoice_get(gchar *doc_no);
 
 /**
  * Persist an invoice.
@@ -57,21 +50,18 @@ Database_Invoice_get(gchar *doc_no);
  * @return `TRUE` if successful, `FALSE` otherwise.
  */
 gboolean
-Database_Invoice_save(Model_Invoice *inv);
+Stk_Database_Invoice_save(Stk_Model_Invoice *inv);
 
 /**
- * Iterate over all invoices and execute a given thunk for each.
+ * Iterate over all invoices and execute a given func for each.
  *
- * @param thunk Function to execute for each invoice.
+ * @param func Function to execute for each invoice.
  */
 void
-Database_Invoice_foreach(void (*thunk)(Model_Invoice*));
+Stk_Database_Invoice_foreach(void (*func)(Stk_Model_Invoice *));
 
 /**
  * Remove all invoices from the database.
- *
- * @param invoice_destroy_thunk `NULL` or Function to run for each invoice;
- *        mainly to free up the memory.
  */
 void
-Database_Invoice_clear(void (*invoice_destroy_thunk)(Model_Invoice *));
+Stk_Database_Invoice_clear(void);

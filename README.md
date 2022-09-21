@@ -9,7 +9,7 @@
 Done.
 
 ```
-$ git fetch --all --tags && git checkout tags/v1.2 -b v1.2   # checkout the tag
+$ git fetch --all --tags && git checkout tags/v1.3 -b v1.3   # checkout the tag
 $ cmake -Bbuild -S.                                          # bootstrap the build
 $ cd build
 $ cmake --build .                                            # build stockman-c

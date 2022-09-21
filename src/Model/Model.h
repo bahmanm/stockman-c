@@ -16,25 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
-#include <glib.h>
-#include "Model.h"
+#pragma once
 
-void
-Model_Invoice_addLine(Model_Invoice *inv, Model_InvoiceLine *iline)
-{
-	inv->lines = g_list_prepend(inv->lines, iline);
-}
-
-
-gint
-Model_InvoiceLine_compareByLineNo(gconstpointer iline_vptr, gconstpointer other_vptr)
-{
-	Model_InvoiceLine *iline = (Model_InvoiceLine *)iline_vptr;
-	Model_InvoiceLine *other = (Model_InvoiceLine *)other_vptr;
-	if (iline->line_no < other->line_no)
-		return -1;
-	else if (iline->line_no == other->line_no)
-		return 0;
-	else
-		return 1;
-}
+#include "Invoice.h"
+#include "InvoiceLine.h"

@@ -16,69 +16,106 @@
  * You should have received a copy of the GNU General Public License
  * along with Stockman-C. If not, see <https://www.gnu.org/licenses/>.
  */
-#include <glib.h>
 #include "Database.h"
+#include "Model/Invoice.h"
 
-typedef struct Database {
-	GHashTable * invoices;
-} Database;
+#define STRCPY(S, V)                                                           \
+  gchar *__tmp_gchar_ptr = S;                                                  \
+  guint __tmp_gchar_ptr_size = sizeof(__tmp_gchar_ptr);                        \
+  V = (gchar *)g_malloc(__tmp_gchar_ptr_size);                                 \
+  g_strlcpy(V, __tmp_gchar_ptr, __tmp_gchar_ptr_size)
 
-const Database*
-Database_get()
+struct _Stk_Database {
+	GObject parent;
+
+	GHashTable *invoices;
+};
+
+G_DEFINE_TYPE(Stk_Database, Stk_Database, G_TYPE_OBJECT)
+
+static GObject *instance = NULL;
+
+static GObject *
+Stk_Database_constructor(GType type,
+                         guint n_construct_properties,
+                         GObjectConstructParam *construct_properties)
 {
-	if (!db) {
-		g_error("database is NOT initialised.\n");
-		g_abort();
-	}
-	return db;
+	if (!instance)
+		instance = G_OBJECT_CLASS(Stk_Database_parent_class)->constructor(type,
+		           n_construct_properties,
+		           construct_properties);
+	return g_object_ref(G_OBJECT(instance));
 }
 
-void
-Database_init()
+static void
+Stk_Database_init(Stk_Database *self)
 {
-	if (db) {
-		g_debug("Database already initialised.");
-		return;
-	}
-	g_debug("Initialising the database...");
-	db = g_malloc(sizeof(Database));
-	db->invoices = g_hash_table_new(g_str_hash, g_str_equal);
+	self->invoices = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_object_unref);
+}
+
+static void
+Stk_Database_finalise(GObject *object)
+{
+	Stk_Database *self = STK_DATABASE(object);
+	if (self->invoices)
+		g_hash_table_unref(self->invoices);
+}
+
+static void
+Stk_Database_class_init(Stk_DatabaseClass *klass)
+{
+	G_OBJECT_CLASS(klass)->constructor = Stk_Database_constructor;
+	G_OBJECT_CLASS(klass)->finalize = Stk_Database_finalise;
+}
+
+Stk_Database *
+Stk_Database_get()
+{
+	return g_object_new(STK_TYPE_DATABASE, NULL);
 }
 
 gboolean
-Database_Invoice_save(Model_Invoice *inv)
+Stk_Database_Invoice_save(Stk_Model_Invoice *inv)
 {
-	return g_hash_table_insert(Database_get()->invoices, inv->doc_no, inv);
-}
-
-Model_Invoice*
-Database_Invoice_get(gchar *doc_no)
-{
-	return g_hash_table_lookup(Database_get()->invoices, doc_no);
-}
-
-void
-invoices_foreach(gpointer doc_no, gpointer invp, gpointer thunkp)
-{
-	Model_Invoice *inv = (Model_Invoice *)invp;
-	void (*thunk)(Model_Invoice *) = thunkp;
-	thunk(inv);
-}
-
-void
-Database_Invoice_foreach(void (*thunk)(Model_Invoice *))
-{
-	g_hash_table_foreach(db->invoices, invoices_foreach, thunk);
-}
-
-void
-Database_Invoice_clear(void (*invoice_destroy_thunk)(Model_Invoice *))
-{
-	g_autoptr(GList) keys = g_hash_table_get_keys(db->invoices);
-	for (GList *key = keys; key; key = key->next) {
-		Model_Invoice *inv = g_hash_table_lookup(db->invoices, key);
-		if (invoice_destroy_thunk)
-			invoice_destroy_thunk(inv);
-		g_hash_table_remove(db->invoices, key->data);
+	if (!inv)
+		return FALSE;
+	g_autoptr(Stk_Database) db = Stk_Database_get();
+	g_object_ref(inv);
+	gchar *doc_no = NULL;
+	STRCPY(Stk_Model_Invoice_get_doc_no(inv)->str, doc_no);
+	if (g_hash_table_contains(db->invoices, doc_no)) {
+		g_object_unref(STK_MODEL_INVOICE(g_hash_table_lookup(db->invoices, doc_no)));
+		return g_hash_table_replace(db->invoices, doc_no, inv);
+	} else {
+		return g_hash_table_insert(db->invoices, doc_no, inv);
 	}
+}
+
+Stk_Model_Invoice *
+Stk_Database_Invoice_get(gchar *doc_no)
+{
+	g_autoptr(Stk_Database) db = Stk_Database_get();
+	return g_hash_table_lookup(db->invoices, doc_no);
+}
+
+void
+invoices_foreach(gpointer doc_no, gpointer invp, gpointer funcp)
+{
+	Stk_Model_Invoice *inv = invp;
+	void (*func)(Stk_Model_Invoice *) = funcp;
+	func(inv);
+}
+
+void
+Stk_Database_Invoice_foreach(void (*func)(Stk_Model_Invoice *))
+{
+	g_autoptr(Stk_Database) db = Stk_Database_get();
+	g_hash_table_foreach(db->invoices, invoices_foreach, func);
+}
+
+void
+Stk_Database_Invoice_clear(void)
+{
+	g_autoptr(Stk_Database) db = Stk_Database_get();
+	g_hash_table_remove_all(db->invoices);
 }
