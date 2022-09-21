@@ -19,41 +19,41 @@
 #pragma once
 #include <glib-object.h>
 
-#define STK_MODEL_TYPE_INVOICELINE (stk_model_invoiceline_get_type())
+#define STK_MODEL_TYPE_INVOICELINE (Stk_Model_InvoiceLine_get_type())
 
-G_DECLARE_FINAL_TYPE(Stk_Model_InvoiceLine, stk_model_invoiceline, STK_MODEL,
+G_DECLARE_FINAL_TYPE(Stk_Model_InvoiceLine, Stk_Model_InvoiceLine, STK_MODEL,
                      INVOICELINE, GObject);
 
 Stk_Model_InvoiceLine *
-stk_model_invoiceline_new(void);
+Stk_Model_InvoiceLine_new(void);
 
 guint
-stk_model_invoiceline_get_line_no(Stk_Model_InvoiceLine *self);
+Stk_Model_InvoiceLine_get_line_no(Stk_Model_InvoiceLine *self);
 void
-stk_model_invoiceline_set_line_no(Stk_Model_InvoiceLine *self,
+Stk_Model_InvoiceLine_set_line_no(Stk_Model_InvoiceLine *self,
                                   guint line_no);
 
 GString *
-stk_model_invoiceline_get_product(Stk_Model_InvoiceLine *self);
+Stk_Model_InvoiceLine_get_product(Stk_Model_InvoiceLine *self);
 void
-stk_model_invoiceline_set_product(Stk_Model_InvoiceLine *self,
+Stk_Model_InvoiceLine_set_product(Stk_Model_InvoiceLine *self,
                                   gchar *product);
 
 guint
-stk_model_invoiceline_get_qty(Stk_Model_InvoiceLine *self);
+Stk_Model_InvoiceLine_get_qty(Stk_Model_InvoiceLine *self);
 void
-stk_model_invoiceline_set_qty(Stk_Model_InvoiceLine *self, guint qty);
+Stk_Model_InvoiceLine_set_qty(Stk_Model_InvoiceLine *self, guint qty);
 
 gdouble
-stk_model_invoiceline_get_price(Stk_Model_InvoiceLine *self);
+Stk_Model_InvoiceLine_get_price(Stk_Model_InvoiceLine *self);
 void
-stk_model_invoiceline_set_price(Stk_Model_InvoiceLine *self,
+Stk_Model_InvoiceLine_set_price(Stk_Model_InvoiceLine *self,
                                 gdouble price);
 
 gdouble
-stk_model_invoiceline_get_line_amt(Stk_Model_InvoiceLine *self);
+Stk_Model_InvoiceLine_get_line_amt(Stk_Model_InvoiceLine *self);
 void
-stk_model_invoiceline_set_line_amt(Stk_Model_InvoiceLine *self, gdouble line_amt);
+Stk_Model_InvoiceLine_set_line_amt(Stk_Model_InvoiceLine *self, gdouble line_amt);
 
 gint
-stk_model_invoiceline_compare_by_line_no(gconstpointer iline_vptr, gconstpointer other_vptr);
+Stk_Model_InvoiceLine_compare_by_line_no(gconstpointer iline_vptr, gconstpointer other_vptr);

@@ -35,24 +35,24 @@ invoice_line_from_csv(gchar **fields);
 Stk_Model_Invoice*
 invoice_from_csv(gchar **fields)
 {
-	Stk_Model_Invoice *inv = stk_model_invoice_new();
-	stk_model_invoice_set_doc_no(inv, fields[0]);
-	stk_model_invoice_set_customer(inv, fields[1]);
-	stk_model_invoice_set_date(inv, fields[2]);
-	stk_model_invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
-	stk_model_invoice_set_discount(inv, g_ascii_strtod(fields[4], NULL));
+	Stk_Model_Invoice *inv = Stk_Model_Invoice_new();
+	Stk_Model_Invoice_set_doc_no(inv, fields[0]);
+	Stk_Model_Invoice_set_customer(inv, fields[1]);
+	Stk_Model_Invoice_set_date(inv, fields[2]);
+	Stk_Model_Invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
+	Stk_Model_Invoice_set_discount(inv, g_ascii_strtod(fields[4], NULL));
 	return inv;
 }
 
 Stk_Model_InvoiceLine*
 invoice_line_from_csv(gchar **fields)
 {
-	Stk_Model_InvoiceLine *iline = stk_model_invoiceline_new();
-	stk_model_invoiceline_set_line_no(iline, g_ascii_strtoull(fields[5], NULL, 10));
-	stk_model_invoiceline_set_product(iline, fields[6]);
-	stk_model_invoiceline_set_qty(iline, g_ascii_strtoull(fields[7], NULL, 10));
-	stk_model_invoiceline_set_price(iline, g_ascii_strtod(fields[8], NULL));
-	stk_model_invoiceline_set_line_amt(iline, g_ascii_strtod(fields[9], NULL));
+	Stk_Model_InvoiceLine *iline = Stk_Model_InvoiceLine_new();
+	Stk_Model_InvoiceLine_set_line_no(iline, g_ascii_strtoull(fields[5], NULL, 10));
+	Stk_Model_InvoiceLine_set_product(iline, fields[6]);
+	Stk_Model_InvoiceLine_set_qty(iline, g_ascii_strtoull(fields[7], NULL, 10));
+	Stk_Model_InvoiceLine_set_price(iline, g_ascii_strtod(fields[8], NULL));
+	Stk_Model_InvoiceLine_set_line_amt(iline, g_ascii_strtod(fields[9], NULL));
 	return iline;
 }
 
@@ -66,7 +66,7 @@ CsvImport_processline(gchar *line)
 		inv = invoice_from_csv(fields);
 	g_object_ref(inv);
 	g_autoptr(Stk_Model_InvoiceLine) iline = invoice_line_from_csv(fields);
-	stk_model_invoice_add_line(inv, iline);
+	Stk_Model_Invoice_add_line(inv, iline);
 	Stk_Database_Invoice_save(inv);
 	g_object_unref(inv);
 	FREE_PTRARR(fields);

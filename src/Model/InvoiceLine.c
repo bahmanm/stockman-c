@@ -28,9 +28,9 @@ struct _Stk_Model_InvoiceLine {
 	gdouble line_amt;
 };
 
-G_DEFINE_FINAL_TYPE(Stk_Model_InvoiceLine, stk_model_invoiceline, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE(Stk_Model_InvoiceLine, Stk_Model_InvoiceLine, G_TYPE_OBJECT)
 
-static void stk_model_invoiceline_init(Stk_Model_InvoiceLine *self) {}
+static void Stk_Model_InvoiceLine_init(Stk_Model_InvoiceLine *self) {}
 
 static void
 Stk_Model_InvoiceLine_finalise(GObject *object)
@@ -38,42 +38,42 @@ Stk_Model_InvoiceLine_finalise(GObject *object)
 	Stk_Model_InvoiceLine *self = STK_MODEL_INVOICELINE(object);
 	if (self->product)
 		g_string_free(self->product, TRUE);
-	G_OBJECT_CLASS(stk_model_invoiceline_parent_class)->finalize(object);
+	G_OBJECT_CLASS(Stk_Model_InvoiceLine_parent_class)->finalize(object);
 }
 
 static void
-stk_model_invoiceline_class_init(Stk_Model_InvoiceLineClass *klass)
+Stk_Model_InvoiceLine_class_init(Stk_Model_InvoiceLineClass *klass)
 {
 	G_OBJECT_CLASS(klass)->finalize = Stk_Model_InvoiceLine_finalise;
 }
 
 Stk_Model_InvoiceLine *
-stk_model_invoiceline_new(void)
+Stk_Model_InvoiceLine_new(void)
 {
 	return g_object_new(STK_MODEL_TYPE_INVOICELINE, NULL);
 }
 
 guint
-stk_model_invoiceline_get_line_no(Stk_Model_InvoiceLine *self)
+Stk_Model_InvoiceLine_get_line_no(Stk_Model_InvoiceLine *self)
 {
 	return self->line_no;
 }
 
 void
-stk_model_invoiceline_set_line_no(Stk_Model_InvoiceLine *self,
+Stk_Model_InvoiceLine_set_line_no(Stk_Model_InvoiceLine *self,
                                   guint line_no)
 {
 	self->line_no = line_no;
 }
 
 GString *
-stk_model_invoiceline_get_product(Stk_Model_InvoiceLine *self)
+Stk_Model_InvoiceLine_get_product(Stk_Model_InvoiceLine *self)
 {
 	return self->product;
 }
 
 void
-stk_model_invoiceline_set_product(Stk_Model_InvoiceLine *self,
+Stk_Model_InvoiceLine_set_product(Stk_Model_InvoiceLine *self,
                                   gchar *product)
 {
 	if (self->product)
@@ -82,44 +82,44 @@ stk_model_invoiceline_set_product(Stk_Model_InvoiceLine *self,
 }
 
 guint
-stk_model_invoiceline_get_qty(Stk_Model_InvoiceLine *self)
+Stk_Model_InvoiceLine_get_qty(Stk_Model_InvoiceLine *self)
 {
 	return self->qty;
 }
 
 void
-stk_model_invoiceline_set_qty(Stk_Model_InvoiceLine *self, guint qty)
+Stk_Model_InvoiceLine_set_qty(Stk_Model_InvoiceLine *self, guint qty)
 {
 	self->qty = qty;
 }
 
 gdouble
-stk_model_invoiceline_get_price(Stk_Model_InvoiceLine *self)
+Stk_Model_InvoiceLine_get_price(Stk_Model_InvoiceLine *self)
 {
 	return self->price;
 }
 
 void
-stk_model_invoiceline_set_price(Stk_Model_InvoiceLine *self,
+Stk_Model_InvoiceLine_set_price(Stk_Model_InvoiceLine *self,
                                 gdouble price)
 {
 	self->price = price;
 }
 
 gdouble
-stk_model_invoiceline_get_line_amt(Stk_Model_InvoiceLine *self)
+Stk_Model_InvoiceLine_get_line_amt(Stk_Model_InvoiceLine *self)
 {
 	return self->line_amt;
 }
 
 void
-stk_model_invoiceline_set_line_amt(Stk_Model_InvoiceLine *self, gdouble line_amt)
+Stk_Model_InvoiceLine_set_line_amt(Stk_Model_InvoiceLine *self, gdouble line_amt)
 {
 	self->line_amt = line_amt;
 }
 
 gint
-stk_model_invoiceline_compare_by_line_no(gconstpointer iline_vptr, gconstpointer other_vptr)
+Stk_Model_InvoiceLine_compare_by_line_no(gconstpointer iline_vptr, gconstpointer other_vptr)
 {
 	Stk_Model_InvoiceLine *iline = (Stk_Model_InvoiceLine *)iline_vptr;
 	Stk_Model_InvoiceLine *other = (Stk_Model_InvoiceLine *)other_vptr;

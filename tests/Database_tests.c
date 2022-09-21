@@ -36,8 +36,8 @@ test_Stk_Database_Invoice_get_and_save()
 {
 	{
 		/* GIVEN */
-		g_autoptr(Stk_Model_Invoice) inv = stk_model_invoice_new();
-		stk_model_invoice_set_doc_no(inv, "I1");
+		g_autoptr(Stk_Model_Invoice) inv = Stk_Model_Invoice_new();
+		Stk_Model_Invoice_set_doc_no(inv, "I1");
 
 		/* WHEN */
 		Stk_Database_Invoice_save(inv);
@@ -46,7 +46,7 @@ test_Stk_Database_Invoice_get_and_save()
 	/* THEN */
 	Stk_Model_Invoice* actual = Stk_Database_Invoice_get("I1");
 	g_assert_nonnull(actual);
-	g_assert_cmpstr("I1", ==, (stk_model_invoice_get_doc_no(actual))->str);
+	g_assert_cmpstr("I1", ==, (Stk_Model_Invoice_get_doc_no(actual))->str);
 }
 
 guint invoices_foreach_func_counter  = 0;
@@ -55,7 +55,7 @@ GString *invoices_foreach_func_doc_nos[2] = {NULL, NULL};
 void
 invoices_foreach_func(Stk_Model_Invoice *inv)
 {
-	invoices_foreach_func_doc_nos[invoices_foreach_func_counter] = stk_model_invoice_get_doc_no(inv);
+	invoices_foreach_func_doc_nos[invoices_foreach_func_counter] = Stk_Model_Invoice_get_doc_no(inv);
 	invoices_foreach_func_counter += 1;
 }
 
@@ -66,11 +66,11 @@ test_Stk_Database_Invoice_foreach()
 	gchar *inv1_doc_no = "I1";
 	gchar *inv2_doc_no = "I2";
 	{
-		g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
-		stk_model_invoice_set_doc_no(inv1, "I1");
+		g_autoptr(Stk_Model_Invoice) inv1 = Stk_Model_Invoice_new();
+		Stk_Model_Invoice_set_doc_no(inv1, "I1");
 		Stk_Database_Invoice_save(inv1);
-		g_autoptr(Stk_Model_Invoice) inv2 = stk_model_invoice_new();
-		stk_model_invoice_set_doc_no(inv2, "I2");
+		g_autoptr(Stk_Model_Invoice) inv2 = Stk_Model_Invoice_new();
+		Stk_Model_Invoice_set_doc_no(inv2, "I2");
 		Stk_Database_Invoice_save(inv2);
 	}
 
@@ -92,8 +92,8 @@ test_Stk_Database_Invoice_clear()
 {
 	{
 		/* GIVEN */
-		g_autoptr(Stk_Model_Invoice) inv1 = stk_model_invoice_new();
-		stk_model_invoice_set_doc_no(inv1, "I1");
+		g_autoptr(Stk_Model_Invoice) inv1 = Stk_Model_Invoice_new();
+		Stk_Model_Invoice_set_doc_no(inv1, "I1");
 		Stk_Database_Invoice_save(inv1);
 	}
 

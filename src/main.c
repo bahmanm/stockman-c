@@ -43,9 +43,9 @@ file_get_lines(char *filepath, GError **error)
 void
 invoice_pretty_print(Stk_Model_Invoice *inv)
 {
-	stk_model_invoice_set_lines(inv,
-	                            g_list_sort(stk_model_invoice_get_lines(inv),
-	                                        stk_model_invoiceline_compare_by_line_no));
+	Stk_Model_Invoice_set_lines(inv,
+	                            g_list_sort(Stk_Model_Invoice_get_lines(inv),
+	                                        Stk_Model_InvoiceLine_compare_by_line_no));
 	g_print("\n"
 	        "+------------------------------------------------------------------------------+\n"
 	        "| INVOICE#: %-35s  DATE:       %-10s        |\n"
@@ -53,23 +53,23 @@ invoice_pretty_print(Stk_Model_Invoice *inv)
 	        "+------------------------------------------------------------------------------+\n"
 	        "| #   | PRODUCT                     | QTY      | PRICE      | AMOUNT           |\n"
 	        "+------------------------------------------------------------------------------+\n",
-	        stk_model_invoice_get_doc_no(inv)->str,
-	        stk_model_invoice_get_date(inv)->str,
-	        stk_model_invoice_get_customer(inv)->str,
-	        stk_model_invoice_get_discount(inv));
-	for (GList *iline = stk_model_invoice_get_lines(inv); iline; iline = iline->next) {
+	        Stk_Model_Invoice_get_doc_no(inv)->str,
+	        Stk_Model_Invoice_get_date(inv)->str,
+	        Stk_Model_Invoice_get_customer(inv)->str,
+	        Stk_Model_Invoice_get_discount(inv));
+	for (GList *iline = Stk_Model_Invoice_get_lines(inv); iline; iline = iline->next) {
 		Stk_Model_InvoiceLine *data = iline->data;
 		g_print("| %3d   %-26s     %8d   %10.2f   %15.2f |\n",
-		        stk_model_invoiceline_get_line_no(data),
-		        stk_model_invoiceline_get_product(data)->str,
-		        stk_model_invoiceline_get_qty(data),
-		        stk_model_invoiceline_get_price(data),
-		        stk_model_invoiceline_get_line_amt(data));
+		        Stk_Model_InvoiceLine_get_line_no(data),
+		        Stk_Model_InvoiceLine_get_product(data)->str,
+		        Stk_Model_InvoiceLine_get_qty(data),
+		        Stk_Model_InvoiceLine_get_price(data),
+		        Stk_Model_InvoiceLine_get_line_amt(data));
 	}
 	g_print("+------------------------------------------------------------------------------+\n"
 	        "|                                                     TOTAL: %17.2f |\n"
 	        "+------------------------------------------------------------------------------+\n",
-	        stk_model_invoice_get_total(inv));
+	        Stk_Model_Invoice_get_total(inv));
 }
 
 int

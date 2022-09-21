@@ -82,7 +82,7 @@ Stk_Database_Invoice_save(Stk_Model_Invoice *inv)
 	g_autoptr(Stk_Database) db = Stk_Database_get();
 	g_object_ref(inv);
 	gchar *doc_no = NULL;
-	STRCPY(stk_model_invoice_get_doc_no(inv)->str, doc_no);
+	STRCPY(Stk_Model_Invoice_get_doc_no(inv)->str, doc_no);
 	if (g_hash_table_contains(db->invoices, doc_no)) {
 		g_object_unref(STK_MODEL_INVOICE(g_hash_table_lookup(db->invoices, doc_no)));
 		return g_hash_table_replace(db->invoices, doc_no, inv);

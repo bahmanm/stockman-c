@@ -37,7 +37,7 @@ invoice_line_has_line_no(const void *iline_vptr, const void *line_no_vptr)
 {
 	Stk_Model_InvoiceLine *iline = (Stk_Model_InvoiceLine *)iline_vptr;
 	guint line_no = *(guint *)line_no_vptr;
-	if (line_no == stk_model_invoiceline_get_line_no(iline))
+	if (line_no == Stk_Model_InvoiceLine_get_line_no(iline))
 		return TRUE;
 	else
 		return FALSE;
@@ -58,24 +58,24 @@ test_CsvImport_processLine__existing_invoice()
 	/* THEN */
 	Stk_Model_Invoice *inv = Stk_Database_Invoice_get("SI-862");
 	g_assert_nonnull(inv);
-	g_assert_cmpstr("SI-862", ==, stk_model_invoice_get_doc_no(inv)->str);
-	g_assert_cmpstr("C-114", ==, stk_model_invoice_get_customer(inv)->str);
-	g_assert_cmpstr("2016/10/16", ==, stk_model_invoice_get_date(inv)->str);
-	g_assert_cmpfloat_with_epsilon(8707.20f, stk_model_invoice_get_total(inv), 0.009f);
-	g_assert_cmpfloat_with_epsilon(29.00, stk_model_invoice_get_discount(inv), 0.009f);
+	g_assert_cmpstr("SI-862", ==, Stk_Model_Invoice_get_doc_no(inv)->str);
+	g_assert_cmpstr("C-114", ==, Stk_Model_Invoice_get_customer(inv)->str);
+	g_assert_cmpstr("2016/10/16", ==, Stk_Model_Invoice_get_date(inv)->str);
+	g_assert_cmpfloat_with_epsilon(8707.20f, Stk_Model_Invoice_get_total(inv), 0.009f);
+	g_assert_cmpfloat_with_epsilon(29.00, Stk_Model_Invoice_get_discount(inv), 0.009f);
 
-	GList *lines = stk_model_invoice_get_lines(inv);
+	GList *lines = Stk_Model_Invoice_get_lines(inv);
 	g_assert_nonnull(lines);
 	g_assert_cmpint(2, ==, g_list_length(lines));
 	guint line_no = 2;
 	GList *node = g_list_find_custom(lines, &line_no, invoice_line_has_line_no);
 	g_assert_nonnull(node);
 	Stk_Model_InvoiceLine *iline = node->data;
-	g_assert_cmpint(1, ==, stk_model_invoiceline_get_line_no(iline));
-	g_assert_cmpstr("P-7964", ==, stk_model_invoiceline_get_product(iline)->str);
-	g_assert_cmpint(192, ==, stk_model_invoiceline_get_qty(iline));
-	g_assert_cmpfloat_with_epsilon(4.33, stk_model_invoiceline_get_price(iline), 0.009f);
-	g_assert_cmpfloat_with_epsilon(831.36, stk_model_invoiceline_get_line_amt(iline), 0.009f);
+	g_assert_cmpint(1, ==, Stk_Model_InvoiceLine_get_line_no(iline));
+	g_assert_cmpstr("P-7964", ==, Stk_Model_InvoiceLine_get_product(iline)->str);
+	g_assert_cmpint(192, ==, Stk_Model_InvoiceLine_get_qty(iline));
+	g_assert_cmpfloat_with_epsilon(4.33, Stk_Model_InvoiceLine_get_price(iline), 0.009f);
+	g_assert_cmpfloat_with_epsilon(831.36, Stk_Model_InvoiceLine_get_line_amt(iline), 0.009f);
 }
 
 void
@@ -91,22 +91,22 @@ test_CsvImport_processLine__new_invoice()
 	/* THEN */
 	g_autoptr(Stk_Model_Invoice) inv = Stk_Database_Invoice_get("SI-862");
 	g_assert_nonnull(inv);
-	g_assert_cmpstr("SI-862", ==, stk_model_invoice_get_doc_no(inv)->str);
-	g_assert_cmpstr("C-114", ==, stk_model_invoice_get_customer(inv)->str);
-	g_assert_cmpstr("2016/10/16", ==, stk_model_invoice_get_date(inv)->str);
-	g_assert_cmpfloat_with_epsilon(8707.20f, stk_model_invoice_get_total(inv), 0.009f);
-	g_assert_cmpfloat_with_epsilon(29.00, stk_model_invoice_get_discount(inv), 0.009f);
+	g_assert_cmpstr("SI-862", ==, Stk_Model_Invoice_get_doc_no(inv)->str);
+	g_assert_cmpstr("C-114", ==, Stk_Model_Invoice_get_customer(inv)->str);
+	g_assert_cmpstr("2016/10/16", ==, Stk_Model_Invoice_get_date(inv)->str);
+	g_assert_cmpfloat_with_epsilon(8707.20f, Stk_Model_Invoice_get_total(inv), 0.009f);
+	g_assert_cmpfloat_with_epsilon(29.00, Stk_Model_Invoice_get_discount(inv), 0.009f);
 
-	GList *lines = stk_model_invoice_get_lines(inv);
+	GList *lines = Stk_Model_Invoice_get_lines(inv);
 	g_assert_nonnull(lines);
 	g_assert_nonnull(lines->data);
 	g_assert_cmpint(1, ==, g_list_length(lines));
 	Stk_Model_InvoiceLine *iline = lines->data;
-	g_assert_cmpint(1, ==, stk_model_invoiceline_get_line_no(iline));
-	g_assert_cmpstr("P-7964", ==, stk_model_invoiceline_get_product(iline)->str);
-	g_assert_cmpint(192, ==, stk_model_invoiceline_get_qty(iline));
-	g_assert_cmpfloat_with_epsilon(4.33, stk_model_invoiceline_get_price(iline), 0.009f);
-	g_assert_cmpfloat_with_epsilon(831.36, stk_model_invoiceline_get_line_amt(iline), 0.009f);
+	g_assert_cmpint(1, ==, Stk_Model_InvoiceLine_get_line_no(iline));
+	g_assert_cmpstr("P-7964", ==, Stk_Model_InvoiceLine_get_product(iline)->str);
+	g_assert_cmpint(192, ==, Stk_Model_InvoiceLine_get_qty(iline));
+	g_assert_cmpfloat_with_epsilon(4.33, Stk_Model_InvoiceLine_get_price(iline), 0.009f);
+	g_assert_cmpfloat_with_epsilon(831.36, Stk_Model_InvoiceLine_get_line_amt(iline), 0.009f);
 }
 
 int

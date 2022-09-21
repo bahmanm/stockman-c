@@ -21,40 +21,40 @@
 #include <glib-object.h>
 #include "InvoiceLine.h"
 
-#define STK_MODEL_TYPE_INVOICE (stk_model_invoice_get_type())
-G_DECLARE_FINAL_TYPE(Stk_Model_Invoice, stk_model_invoice, STK_MODEL, INVOICE,
+#define STK_MODEL_TYPE_INVOICE (Stk_Model_Invoice_get_type())
+G_DECLARE_FINAL_TYPE(Stk_Model_Invoice, Stk_Model_Invoice, STK_MODEL, INVOICE,
                      GObject)
 
-Stk_Model_Invoice *stk_model_invoice_new();
+Stk_Model_Invoice *Stk_Model_Invoice_new();
 
 GString *
-stk_model_invoice_get_doc_no(Stk_Model_Invoice *self);
+Stk_Model_Invoice_get_doc_no(Stk_Model_Invoice *self);
 void
-stk_model_invoice_set_doc_no(Stk_Model_Invoice *self, gchar *doc_no);
+Stk_Model_Invoice_set_doc_no(Stk_Model_Invoice *self, gchar *doc_no);
 
 GString *
-stk_model_invoice_get_customer(Stk_Model_Invoice *self);
+Stk_Model_Invoice_get_customer(Stk_Model_Invoice *self);
 void
-stk_model_invoice_set_customer(Stk_Model_Invoice *self, gchar *customer);
+Stk_Model_Invoice_set_customer(Stk_Model_Invoice *self, gchar *customer);
 
 GString *
-stk_model_invoice_get_date(Stk_Model_Invoice *self);
+Stk_Model_Invoice_get_date(Stk_Model_Invoice *self);
 void
-stk_model_invoice_set_date(Stk_Model_Invoice *self, gchar *date);
+Stk_Model_Invoice_set_date(Stk_Model_Invoice *self, gchar *date);
 
 gdouble
-stk_model_invoice_get_total(Stk_Model_Invoice *self);
+Stk_Model_Invoice_get_total(Stk_Model_Invoice *self);
 void
-stk_model_invoice_set_total(Stk_Model_Invoice *self, gdouble total);
+Stk_Model_Invoice_set_total(Stk_Model_Invoice *self, gdouble total);
 
 gdouble
-stk_model_invoice_get_discount(Stk_Model_Invoice *self);
+Stk_Model_Invoice_get_discount(Stk_Model_Invoice *self);
 void
-stk_model_invoice_set_discount(Stk_Model_Invoice *self, gdouble discount);
+Stk_Model_Invoice_set_discount(Stk_Model_Invoice *self, gdouble discount);
 
 GList *
-stk_model_invoice_get_lines(Stk_Model_Invoice *self);
+Stk_Model_Invoice_get_lines(Stk_Model_Invoice *self);
 void
-stk_model_invoice_set_lines(Stk_Model_Invoice *self, GList *lines);
+Stk_Model_Invoice_set_lines(Stk_Model_Invoice *self, GList *lines);
 void
-stk_model_invoice_add_line(Stk_Model_Invoice *self, Stk_Model_InvoiceLine *line);
+Stk_Model_Invoice_add_line(Stk_Model_Invoice *self, Stk_Model_InvoiceLine *line);
