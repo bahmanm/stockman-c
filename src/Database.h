@@ -62,9 +62,6 @@ Stk_Database_Invoice_foreach(void (*func)(Stk_Model_Invoice *));
 
 /**
  * Remove all invoices from the database.
- *
- * @param invoice_destroy_func `NULL` or Function to run for each invoice;
- *        mainly to free up the memory.
  */
 void
-Stk_Database_Invoice_clear(void (*invoice_destroy_func)(Stk_Model_Invoice *));
+Stk_Database_Invoice_clear(void);

@@ -29,7 +29,7 @@ database_setup()
 void
 database_teardown()
 {
-	Stk_Database_Invoice_clear(NULL);
+	Stk_Database_Invoice_clear();
 }
 
 gboolean

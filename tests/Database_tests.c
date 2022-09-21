@@ -28,7 +28,7 @@ database_setup()
 void
 database_teardown()
 {
-	Stk_Database_Invoice_clear(NULL);
+	Stk_Database_Invoice_clear();
 }
 
 void
@@ -98,7 +98,7 @@ test_Stk_Database_Invoice_clear()
 	}
 
 	/* WHEN */
-	Stk_Database_Invoice_clear(NULL);
+	Stk_Database_Invoice_clear();
 
 	/* THEN */
 	g_assert_null(Stk_Database_Invoice_get("I1"));

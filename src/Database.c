@@ -114,7 +114,7 @@ Stk_Database_Invoice_foreach(void (*func)(Stk_Model_Invoice *))
 }
 
 void
-Stk_Database_Invoice_clear(void (*invoice_destroy_func)(Stk_Model_Invoice *))
+Stk_Database_Invoice_clear(void)
 {
 	g_autoptr(Stk_Database) db = Stk_Database_get();
 	g_hash_table_remove_all(db->invoices);
