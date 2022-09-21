@@ -18,17 +18,18 @@
  */
 #include "Database.h"
 #include "CsvImport.h"
+#include "Model/Invoice.h"
+#include "Model/InvoiceLine.h"
 
 void
 database_setup()
 {
-	Database_init();
 }
 
 void
 database_teardown()
 {
-	Database_Invoice_clear(NULL);
+	Stk_Database_Invoice_clear(NULL);
 }
 
 gboolean
@@ -55,7 +56,7 @@ test_CsvImport_processLine__existing_invoice()
 	CsvImport_processline(csvline2);
 
 	/* THEN */
-	g_autoptr(Stk_Model_Invoice) inv = Database_Invoice_get("SI-862");
+	Stk_Model_Invoice *inv = Stk_Database_Invoice_get("SI-862");
 	g_assert_nonnull(inv);
 	g_assert_cmpstr("SI-862", ==, stk_model_invoice_get_doc_no(inv)->str);
 	g_assert_cmpstr("C-114", ==, stk_model_invoice_get_customer(inv)->str);
@@ -63,13 +64,13 @@ test_CsvImport_processLine__existing_invoice()
 	g_assert_cmpfloat_with_epsilon(8707.20f, stk_model_invoice_get_total(inv), 0.009f);
 	g_assert_cmpfloat_with_epsilon(29.00, stk_model_invoice_get_discount(inv), 0.009f);
 
-	g_autoptr(GList) lines = stk_model_invoice_get_lines(inv);
+	GList *lines = stk_model_invoice_get_lines(inv);
 	g_assert_nonnull(lines);
 	g_assert_cmpint(2, ==, g_list_length(lines));
 	guint line_no = 2;
-	g_autoptr(GList) node = g_list_find_custom(lines, &line_no, invoice_line_has_line_no);
+	GList *node = g_list_find_custom(lines, &line_no, invoice_line_has_line_no);
 	g_assert_nonnull(node);
-	g_autoptr(Stk_Model_InvoiceLine) iline = node->data;
+	Stk_Model_InvoiceLine *iline = node->data;
 	g_assert_cmpint(1, ==, stk_model_invoiceline_get_line_no(iline));
 	g_assert_cmpstr("P-7964", ==, stk_model_invoiceline_get_product(iline)->str);
 	g_assert_cmpint(192, ==, stk_model_invoiceline_get_qty(iline));
@@ -88,7 +89,7 @@ test_CsvImport_processLine__new_invoice()
 	CsvImport_processline(csvline);
 
 	/* THEN */
-	g_autoptr(Stk_Model_Invoice) inv = Database_Invoice_get("SI-862");
+	g_autoptr(Stk_Model_Invoice) inv = Stk_Database_Invoice_get("SI-862");
 	g_assert_nonnull(inv);
 	g_assert_cmpstr("SI-862", ==, stk_model_invoice_get_doc_no(inv)->str);
 	g_assert_cmpstr("C-114", ==, stk_model_invoice_get_customer(inv)->str);
@@ -96,11 +97,11 @@ test_CsvImport_processLine__new_invoice()
 	g_assert_cmpfloat_with_epsilon(8707.20f, stk_model_invoice_get_total(inv), 0.009f);
 	g_assert_cmpfloat_with_epsilon(29.00, stk_model_invoice_get_discount(inv), 0.009f);
 
-	g_autoptr(GList) lines = stk_model_invoice_get_lines(inv);
+	GList *lines = stk_model_invoice_get_lines(inv);
 	g_assert_nonnull(lines);
 	g_assert_nonnull(lines->data);
 	g_assert_cmpint(1, ==, g_list_length(lines));
-	g_autoptr(Stk_Model_InvoiceLine) iline = lines->data;
+	Stk_Model_InvoiceLine *iline = lines->data;
 	g_assert_cmpint(1, ==, stk_model_invoiceline_get_line_no(iline));
 	g_assert_cmpstr("P-7964", ==, stk_model_invoiceline_get_product(iline)->str);
 	g_assert_cmpint(192, ==, stk_model_invoiceline_get_qty(iline));

@@ -20,6 +20,11 @@
 #include "CsvImport.h"
 #include "Database.h"
 
+#define FREE_PTRARR(PA)                                                        \
+  for (int __ptrarr_element = 0; PA[__ptrarr_element]; __ptrarr_element++)     \
+          g_free(PA[__ptrarr_element]);                                        \
+  g_free(PA);
+
 
 Stk_Model_Invoice*
 invoice_from_csv(gchar **fields);
@@ -35,9 +40,7 @@ invoice_from_csv(gchar **fields)
 	stk_model_invoice_set_customer(inv, fields[1]);
 	stk_model_invoice_set_date(inv, fields[2]);
 	stk_model_invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
-	stk_model_invoice_set_total(inv, g_ascii_strtod(fields[3], NULL));
 	stk_model_invoice_set_discount(inv, g_ascii_strtod(fields[4], NULL));
-	g_object_ref(inv);
 	return inv;
 }
 
@@ -50,7 +53,6 @@ invoice_line_from_csv(gchar **fields)
 	stk_model_invoiceline_set_qty(iline, g_ascii_strtoull(fields[7], NULL, 10));
 	stk_model_invoiceline_set_price(iline, g_ascii_strtod(fields[8], NULL));
 	stk_model_invoiceline_set_line_amt(iline, g_ascii_strtod(fields[9], NULL));
-	g_object_ref(iline);
 	return iline;
 }
 
@@ -59,10 +61,13 @@ CsvImport_processline(gchar *line)
 {
 	gchar **fields = g_strsplit(line, ",", -1);
 	gchar *doc_no = fields[0];
-	g_autoptr(Stk_Model_Invoice) inv = Database_Invoice_get(doc_no);
+	Stk_Model_Invoice *inv = Stk_Database_Invoice_get(doc_no);
 	if (!inv)
 		inv = invoice_from_csv(fields);
+	g_object_ref(inv);
 	g_autoptr(Stk_Model_InvoiceLine) iline = invoice_line_from_csv(fields);
 	stk_model_invoice_add_line(inv, iline);
-	Database_Invoice_save(inv);
+	Stk_Database_Invoice_save(inv);
+	g_object_unref(inv);
+	FREE_PTRARR(fields);
 }

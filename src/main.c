@@ -80,7 +80,6 @@ main(int argc, char **argv)
 		return 0;
 	}
 	g_log_set_writer_func(g_log_writer_standard_streams, NULL, NULL);
-	Database_init();
 
 	g_autoptr(GError) error = NULL;
 	gchar **lines;
@@ -88,6 +87,6 @@ main(int argc, char **argv)
 		g_error("ERROR: %s\n", error->message);
 	for (int line=0; lines[line]; line++)
 		CsvImport_processline(lines[line]);
-	Database_Invoice_foreach(invoice_pretty_print);
+	Stk_Database_Invoice_foreach(invoice_pretty_print);
 	return 0;
 }

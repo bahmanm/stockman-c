@@ -19,6 +19,12 @@
 #include "Database.h"
 #include "Model/Invoice.h"
 
+#define STRCPY(S, V)                                                           \
+  gchar *__tmp_gchar_ptr = S;                                                  \
+  guint __tmp_gchar_ptr_size = sizeof(__tmp_gchar_ptr);                        \
+  V = (gchar *)g_malloc(__tmp_gchar_ptr_size);                                 \
+  g_strlcpy(V, __tmp_gchar_ptr, __tmp_gchar_ptr_size)
+
 struct _Stk_Database {
 	GObject parent;
 
@@ -44,7 +50,7 @@ Stk_Database_constructor(GType type,
 static void
 Stk_Database_init(Stk_Database *self)
 {
-	self->invoices = g_hash_table_new(g_str_hash, g_str_equal);
+	self->invoices = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_object_unref);
 }
 
 static void
@@ -75,14 +81,12 @@ Stk_Database_Invoice_save(Stk_Model_Invoice *inv)
 		return FALSE;
 	g_autoptr(Stk_Database) db = Stk_Database_get();
 	g_object_ref(inv);
-	gchar *doc_no = stk_model_invoice_get_doc_no(inv)->str;
+	gchar *doc_no = NULL;
+	STRCPY(stk_model_invoice_get_doc_no(inv)->str, doc_no);
 	if (g_hash_table_contains(db->invoices, doc_no)) {
-		/* TODO free the existing binding */
+		g_object_unref(STK_MODEL_INVOICE(g_hash_table_lookup(db->invoices, doc_no)));
 		return g_hash_table_replace(db->invoices, doc_no, inv);
 	} else {
-		GString *doc_no_str = g_string_new(doc_no);
-		doc_no = doc_no_str->str;
-		g_string_free(doc_no_str, FALSE);
 		return g_hash_table_insert(db->invoices, doc_no, inv);
 	}
 }
@@ -113,15 +117,5 @@ void
 Stk_Database_Invoice_clear(void (*invoice_destroy_func)(Stk_Model_Invoice *))
 {
 	g_autoptr(Stk_Database) db = Stk_Database_get();
-	GList* keys_head = g_hash_table_get_keys(db->invoices);
-	for (GList *key = keys_head; key; key = key->next) {
-		Stk_Model_Invoice* inv = g_hash_table_lookup(db->invoices, key->data);
-		g_hash_table_remove(db->invoices, key->data);
-		if (invoice_destroy_func)
-			invoice_destroy_func(inv);
-		else
-			g_object_unref(inv);
-		g_free(key->data);
-	}
-	g_list_free(keys_head);
+	g_hash_table_remove_all(db->invoices);
 }

@@ -70,8 +70,6 @@ stk_model_invoice_new()
 GString *
 stk_model_invoice_get_doc_no(Stk_Model_Invoice *self)
 {
-	/* TODO free the existing value */
-
 	return self->doc_no;
 }
 
